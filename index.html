@@ -1,239 +1,319 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <title>Medportal | Disparos RD</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<title>Medportal | Disparos RD</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Google Font -->
-  <link
-    href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
-    rel="stylesheet"
-  />
+<!-- Google Font -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap">
 
-  <!-- Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-  <style>
-    :root{
-      --primary:#1E2D5C;
-      --secondary:#253F85;
-      --accent:#00A6DF;
-      --support:#F9BD00;
-      --bg:#ECF0F8;
-      --card:#ffffff;
-      --text:#383839;
-      --muted:#7B7D81;
-    }
+<style>
+:root{
+  --primary:#1E2D5C;
+  --secondary:#253F85;
+  --accent:#00A6DF;
+  --highlight:#F9BD00;
+  --bg:#ECF0F8;
+  --card:#FFFFFF;
+  --text:#383839;
+  --muted:#7B7D81;
+}
+*{box-sizing:border-box;font-family:'Roboto',sans-serif;}
+body{margin:0;background:var(--bg);color:var(--text);}
 
-    [data-theme="dark"]{
-      --bg:#0E1429;
-      --card:#151C3A;
-      --text:#E6E8F0;
-      --muted:#A0A4C0;
-    }
+.sidebar{
+  position:fixed;left:0;top:0;bottom:0;width:260px;
+  background:var(--primary);color:#fff;
+  padding:24px;display:flex;flex-direction:column;
+}
+.logo{margin-bottom:32px;text-align:center;}
+.logo img{max-width:180px;}
 
-    *{box-sizing:border-box;font-family:'Roboto',sans-serif;}
-    body{margin:0;background:var(--bg);color:var(--text);transition:.3s;}
+.nav a{
+  display:block;color:#fff;text-decoration:none;
+  padding:12px 14px;border-radius:8px;
+  margin-bottom:6px;
+}
+.nav a.active,.nav a:hover{background:rgba(255,255,255,.15);}
 
-    .sidebar{
-      position:fixed;left:0;top:0;bottom:0;width:260px;
-      background:var(--primary);color:#fff;
-      padding:24px;display:flex;flex-direction:column;
-    }
+.theme-toggle{
+  margin-top:auto;
+  border:none;border-radius:8px;
+  background:rgba(255,255,255,.15);
+  color:#fff;padding:10px;
+  cursor:pointer;font-size:18px;
+}
 
-    .logo{
-      display:flex;justify-content:center;align-items:center;
-      margin-bottom:32px;
-    }
-    .logo img{max-width:180px;display:none;}
-    .logo img.active{display:block;}
+.main{margin-left:260px;padding:32px;}
+.section{display:none;}
+.section.active{display:block;}
 
-    .nav a{
-      display:block;color:#fff;text-decoration:none;
-      padding:12px 14px;border-radius:8px;
-      margin-bottom:6px;transition:.3s;
-    }
-    .nav a:hover,.nav a.active{
-      background:rgba(255,255,255,.15);
-    }
+h1{margin-top:0;font-size:22px;}
 
-    .theme-toggle{
-      margin-top:auto;
-      background:rgba(255,255,255,.15);
-      border:none;border-radius:8px;
-      padding:10px;color:#fff;
-      cursor:pointer;
-    }
+.kpis{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:16px;margin-bottom:24px;
+}
+.card{
+  background:var(--card);
+  border-radius:12px;padding:20px;
+  box-shadow:0 6px 18px rgba(0,0,0,.08);
+}
+.card span{font-size:13px;color:var(--muted);}
+.card h2{margin:8px 0;color:var(--secondary);}
 
-    .main{margin-left:260px;padding:32px;}
-    .section{display:none;}
-    .section.active{display:block;}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(420px,1fr));
+  gap:24px;
+}
+.chart-card{
+  background:var(--card);
+  border-radius:12px;padding:20px;
+  box-shadow:0 6px 18px rgba(0,0,0,.08);
+}
 
-    .kpis{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-      gap:16px;margin-bottom:24px;
-    }
-    .card{
-      background:var(--card);
-      border-radius:12px;padding:20px;
-      box-shadow:0 6px 18px rgba(0,0,0,.08);
-    }
-    .card span{font-size:13px;color:var(--muted);}
-    .card h2{margin:8px 0;color:var(--secondary);}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th,td{padding:10px;border-bottom:1px solid #ddd;}
+th{background:#f3f5fb;}
+tr:hover{background:#f9fafc;}
 
-    .grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(420px,1fr));
-      gap:24px;
-    }
-    .chart-card{
-      background:var(--card);
-      border-radius:12px;padding:20px;
-      box-shadow:0 6px 18px rgba(0,0,0,.08);
-    }
-  </style>
+.help{
+  float:right;
+  background:var(--accent);
+  color:#fff;
+  border-radius:50%;
+  width:20px;height:20px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  font-size:12px;
+  cursor:pointer;
+}
+</style>
 </head>
 
-<body data-theme="light">
+<body>
 
-  <div class="sidebar">
-    <div class="logo">
-      <img id="logoLight" src="logo-play-azulclaro(3).png" class="active" />
-      <img id="logoDark" src="logo-play-padrao(3).png" />
-    </div>
-
-    <div class="nav">
-      <a href="#" class="active" onclick="showSection(event,'geral')">📊 Visão Geral</a>
-      <a href="#" onclick="showSection(event,'horarios')">⏰ Horários & Dias</a>
-      <a href="#" onclick="showSection(event,'ranking')">🏆 Ranking</a>
-      <a href="#" onclick="showSection(event,'insights')">💡 Insights</a>
-    </div>
-
-    <button class="theme-toggle" onclick="toggleTheme()">🌙 / ☀️ Tema</button>
+<div class="sidebar">
+  <div class="logo">
+    <img src="logo-play-azulclaro(3).png" alt="Medportal">
   </div>
 
-  <div class="main">
-
-    <section id="geral" class="section active">
-      <div class="kpis">
-        <div class="card"><span>Taxa Média de Abertura</span><h2>29,49%</h2></div>
-        <div class="card"><span>CTR Médio</span><h2>3,92%</h2></div>
-        <div class="card"><span>Taxa de Entrega</span><h2>97,04%</h2></div>
-      </div>
-
-      <div class="grid">
-        <div class="chart-card"><canvas id="evolucao"></canvas></div>
-        <div class="chart-card"><canvas id="funil"></canvas></div>
-      </div>
-    </section>
-
-    <section id="horarios" class="section">
-      <div class="grid">
-        <div class="chart-card"><canvas id="aberturaDia"></canvas></div>
-        <div class="chart-card"><canvas id="ctrHora"></canvas></div>
-      </div>
-    </section>
-
-    <section id="ranking" class="section">
-      <div class="chart-card"><canvas id="rankingChart"></canvas></div>
-    </section>
-
-    <section id="insights" class="section">
-      <div class="chart-card">
-        <ul>
-          <li><b>Melhor dia:</b> Quinta-feira</li>
-          <li><b>Melhor horário:</b> 12h – 15h</li>
-          <li>Webinars concentram maior CTR</li>
-        </ul>
-      </div>
-    </section>
-
+  <div class="nav">
+    <a href="#" class="active" onclick="showSection(event,'visao')">Visão Geral</a>
+    <a href="#" onclick="showSection(event,'horarios')">Horários e Dias</a>
+    <a href="#" onclick="showSection(event,'ranking')">Ranking</a>
+    <a href="#" onclick="showSection(event,'insights')">Insights</a>
   </div>
 
-  <script>
-    function showSection(e,id){
-      e.preventDefault();
-      document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-      document.getElementById(id).classList.add('active');
-      document.querySelectorAll('.nav a').forEach(a=>a.classList.remove('active'));
-      e.target.classList.add('active');
-    }
+  <button class="theme-toggle" onclick="toggleTheme()">🌙 ☀️</button>
+</div>
 
-    function toggleTheme(){
-      const body=document.body;
-      const light=document.getElementById('logoLight');
-      const dark=document.getElementById('logoDark');
+<div class="main">
 
-      if(body.dataset.theme==='light'){
-        body.dataset.theme='dark';
-        light.classList.remove('active');
-        dark.classList.add('active');
-      }else{
-        body.dataset.theme='light';
-        dark.classList.remove('active');
-        light.classList.add('active');
-      }
-    }
+<section id="visao" class="section active">
+  <h1>Dashboard – Visão Geral <span class="help" title="KPIs e desempenho geral dos disparos">?</span></h1>
 
-    new Chart(document.getElementById('evolucao'),{
-      type:'line',
-      data:{
-        labels:['Dez','Jan','Fev','Mar','Abr'],
-        datasets:[{
-          data:[24,28,32,27,29],
-          borderColor:'#00A6DF',
-          tension:.4
-        }]
-      }
-    });
+  <div class="kpis" id="kpisVisao"></div>
 
-    new Chart(document.getElementById('funil'),{
-      type:'bar',
-      data:{
-        labels:['Enviados','Entregues','Abertos','Cliques'],
-        datasets:[{
-          data:[25000,24200,7100,980],
-          backgroundColor:['#253F85','#1E2D5C','#00A6DF','#F9BD00']
-        }]
-      }
-    });
+  <div class="grid">
+    <div class="chart-card"><canvas id="evolucaoMensal"></canvas></div>
+    <div class="chart-card"><canvas id="comparacaoMedias"></canvas></div>
+    <div class="chart-card"><canvas id="distribuicaoCTR"></canvas></div>
+  </div>
 
-    new Chart(document.getElementById('aberturaDia'),{
-      type:'bar',
-      data:{
-        labels:['Seg','Ter','Qua','Qui','Sex'],
-        datasets:[{
-          data:[26.5,27.6,30.5,34.5,28.4],
-          backgroundColor:'#253F85'
-        }]
-      }
-    });
+  <div class="chart-card" style="margin-top:24px">
+    <h3>Dados completos</h3>
+    <table id="tabelaDados"></table>
+  </div>
+</section>
 
-    new Chart(document.getElementById('ctrHora'),{
-      type:'line',
-      data:{
-        labels:['8','10','12','14','16'],
-        datasets:[{
-          data:[0,1,8.5,1.2,6.1],
-          borderColor:'#F9BD00',
-          tension:.4
-        }]
-      }
-    });
+<section id="horarios" class="section">
+  <h1>Dashboard – Horários e Dias <span class="help" title="Performance por dia da semana e horário">?</span></h1>
+  <div class="grid">
+    <div class="chart-card"><canvas id="mediaDia"></canvas></div>
+    <div class="chart-card"><canvas id="ctrHora"></canvas></div>
+  </div>
+</section>
 
-    new Chart(document.getElementById('rankingChart'),{
-      type:'bar',
-      data:{
-        labels:['Webinar','Pesquisa','Institucional'],
-        datasets:[{
-          data:[54,38,24],
-          backgroundColor:'#00A6DF'
-        }]
-      }
-    });
-  </script>
+<section id="ranking" class="section">
+  <h1>Dashboard – Ranking <span class="help" title="Melhores e piores campanhas">?</span></h1>
+  <div class="grid">
+    <div class="chart-card"><canvas id="scatter"></canvas></div>
+  </div>
+</section>
+
+<section id="insights" class="section">
+  <h1>Dashboard – Insights <span class="help" title="Análises automáticas">?</span></h1>
+  <div class="chart-card" id="insightsTexto"></div>
+</section>
+
+</div>
+
+<script>
+/* =========================
+   DADOS (JSON)
+========================= */
+const dados = [
+  {"assunto":"Webinar Exclusivo","data":"26/02/2026","hora":"12:55","dia":"Quinta-feira","leads":121,"entregues":120,"aberturas":59,"cliques":39,"taxaEntrega":99.17,"taxaAbertura":49.17,"ctr":32.5},
+  {"assunto":"Atualização Institucional","data":"12/01/2026","hora":"10:00","dia":"Segunda-feira","leads":684,"entregues":659,"aberturas":160,"cliques":0,"taxaEntrega":96.35,"taxaAbertura":24.28,"ctr":0},
+  {"assunto":"Webinar É amanhã","data":"25/02/2026","hora":"15:58","dia":"Quarta-feira","leads":116,"entregues":113,"aberturas":61,"cliques":15,"taxaEntrega":97.41,"taxaAbertura":53.98,"ctr":13.27}
+];
+
+/* =========================
+   UTILITÁRIOS
+========================= */
+const media = arr => arr.reduce((a,b)=>a+b,0)/arr.length;
+const soma = arr => arr.reduce((a,b)=>a+b,0);
+
+/* =========================
+   KPIs VISÃO GERAL
+========================= */
+const kpis = [
+  {label:'Total de e-mails',value:dados.length},
+  {label:'Leads selecionados',value:soma(dados.map(d=>d.leads))},
+  {label:'Entregues',value:soma(dados.map(d=>d.entregues))},
+  {label:'Taxa média de entrega',value:media(dados.map(d=>d.taxaEntrega)).toFixed(2)+'%'},
+  {label:'Taxa média de abertura',value:media(dados.map(d=>d.taxaAbertura)).toFixed(2)+'%'},
+  {label:'CTR médio',value:media(dados.map(d=>d.ctr)).toFixed(2)+'%'},
+  {label:'Cliques únicos',value:soma(dados.map(d=>d.cliques))}
+];
+
+document.getElementById('kpisVisao').innerHTML = kpis.map(k=>`
+  <div class="card"><span>${k.label}</span><h2>${k.value}</h2></div>
+`).join('');
+
+/* =========================
+   GRÁFICOS
+========================= */
+new Chart(evolucaoMensal,{
+  type:'bar',
+  data:{
+    labels:['Fev','Jan'],
+    datasets:[
+      {label:'Enviados',data:[2,1],backgroundColor:'#253F85'},
+      {label:'Abertura média',data:[51,24],backgroundColor:'#00A6DF'},
+      {label:'CTR médio',data:[22,0],backgroundColor:'#F9BD00'}
+    ]
+  }
+});
+
+new Chart(comparacaoMedias,{
+  type:'bar',
+  data:{
+    labels:['Abertura média','CTR médio'],
+    datasets:[{
+      data:[
+        media(dados.map(d=>d.taxaAbertura)),
+        media(dados.map(d=>d.ctr))
+      ],
+      backgroundColor:['#253F85','#F9BD00']
+    }]
+  }
+});
+
+new Chart(distribuicaoCTR,{
+  type:'pie',
+  data:{
+    labels:['CTR 0','0–2%','2–5%','>5%'],
+    datasets:[{
+      data:[
+        dados.filter(d=>d.ctr===0).length,
+        dados.filter(d=>d.ctr>0 && d.ctr<=2).length,
+        dados.filter(d=>d.ctr>2 && d.ctr<=5).length,
+        dados.filter(d=>d.ctr>5).length
+      ],
+      backgroundColor:['#ccc','#253F85','#00A6DF','#F9BD00']
+    }]
+  }
+});
+
+/* =========================
+   TABELA
+========================= */
+const tabela = document.getElementById('tabelaDados');
+tabela.innerHTML = `
+<thead><tr>${Object.keys(dados[0]).map(h=>`<th>${h}</th>`).join('')}</tr></thead>
+<tbody>
+${dados.map(d=>`<tr>${Object.values(d).map(v=>`<td>${v}</td>`).join('')}</tr>`).join('')}
+</tbody>`;
+
+/* =========================
+   HORÁRIOS
+========================= */
+new Chart(mediaDia,{
+  type:'bar',
+  data:{
+    labels:[...new Set(dados.map(d=>d.dia))],
+    datasets:[{
+      data:[...new Set(dados.map(d=>d.dia))].map(dia=>
+        media(dados.filter(d=>d.dia===dia).map(d=>d.taxaAbertura))
+      ),
+      backgroundColor:'#253F85'
+    }]
+  }
+});
+
+new Chart(ctrHora,{
+  type:'line',
+  data:{
+    labels:dados.map(d=>d.hora),
+    datasets:[{
+      data:dados.map(d=>d.ctr),
+      borderColor:'#00A6DF',
+      tension:.4
+    }]
+  }
+});
+
+/* =========================
+   RANKING / SCATTER
+========================= */
+new Chart(scatter,{
+  type:'scatter',
+  data:{
+    datasets:[{
+      data:dados.map(d=>({x:d.taxaAbertura,y:d.ctr})),
+      backgroundColor:'#F9BD00'
+    }]
+  }
+});
+
+/* =========================
+   INSIGHTS
+========================= */
+const melhorDia = [...new Set(dados.map(d=>d.dia))]
+  .map(dia=>({dia,media:media(dados.filter(d=>d.dia===dia).map(d=>d.ctr))}))
+  .sort((a,b)=>b.media-a.media)[0];
+
+document.getElementById('insightsTexto').innerHTML = `
+<p><b>Padrão:</b> campanhas de webinar concentram maior CTR.</p>
+<p><b>Melhor dia:</b> ${melhorDia.dia}.</p>
+<p><b>Gargalo:</b> ${dados.filter(d=>d.ctr===0).length} campanhas sem cliques.</p>
+<p><b>Recomendação:</b> priorizar CTAs claros e testes A/B em campanhas institucionais.</p>
+`;
+
+/* =========================
+   NAVEGAÇÃO
+========================= */
+function showSection(e,id){
+  e.preventDefault();
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.nav a').forEach(a=>a.classList.remove('active'));
+  e.target.classList.add('active');
+}
+function toggleTheme(){
+  document.body.style.background =
+    document.body.style.background ? '' : '#0E1429';
+}
+</script>
 
 </body>
 </html>
