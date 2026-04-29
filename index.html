@@ -317,10 +317,58 @@
       color:var(--muted);
       font-size:11px;
     }
+    .heatmap .cell {
+      position:relative;
+      cursor:help;
+    }
+    .heatmap .cell[data-tooltip]:hover::after {
+      content:attr(data-tooltip);
+      position:absolute;
+      left:50%;
+      bottom:calc(100% + 10px);
+      transform:translateX(-50%);
+      min-width:230px;
+      max-width:280px;
+      white-space:pre-line;
+      text-align:left;
+      background:rgba(13,21,48,.96);
+      color:#fff;
+      border-radius:14px;
+      padding:12px 14px;
+      font-size:12px;
+      line-height:1.45;
+      box-shadow:0 12px 32px rgba(0,0,0,.28);
+      z-index:50;
+      pointer-events:none;
+    }
+    .heatmap .cell[data-tooltip]:hover::before {
+      content:"";
+      position:absolute;
+      left:50%;
+      bottom:calc(100% + 4px);
+      transform:translateX(-50%);
+      border-width:6px 6px 0 6px;
+      border-style:solid;
+      border-color:rgba(13,21,48,.96) transparent transparent transparent;
+      z-index:51;
+      pointer-events:none;
+    }
     .split {
       display:grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr;
       gap:18px;
+    }
+    .schedule-table-filters {
+      margin: 0 0 16px;
+      padding: 14px;
+      background: var(--card-2);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: none;
+    }
+    .schedule-table-filters .filter-grid {
+      grid-template-columns: repeat(2, minmax(0, 240px));
+      justify-content: flex-start;
     }
     .insights-grid {
       display:grid;
@@ -340,6 +388,53 @@
       margin-top:8px;
       font-size:12px;
       color:var(--muted);
+    }
+
+    .ranking-list {
+      display:grid;
+      gap:10px;
+      max-height:320px;
+      overflow:auto;
+      padding-right:4px;
+    }
+    .ranking-item {
+      display:grid;
+      grid-template-columns: 34px 1fr auto;
+      gap:10px;
+      align-items:center;
+      padding:12px;
+      border:1px solid var(--border);
+      border-radius:16px;
+      background:var(--card-2);
+    }
+    .ranking-position {
+      width:30px;
+      height:30px;
+      border-radius:999px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:rgba(220,38,38,.12);
+      color:var(--danger);
+      font-weight:800;
+      font-size:12px;
+    }
+    .ranking-subject {
+      font-size:13px;
+      font-weight:700;
+      line-height:1.35;
+    }
+    .ranking-meta {
+      margin-top:4px;
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.35;
+    }
+    .ranking-value {
+      font-size:18px;
+      font-weight:800;
+      color:var(--danger);
+      white-space:nowrap;
     }
     .dot {
       width:10px; height:10px; border-radius:999px; display:inline-block;
@@ -384,9 +479,122 @@
       .title-wrap h1 { font-size:28px; }
       .section-header { flex-direction:column; }
     }
+
+    /* Aviso fixo de atualização */
+    .update-badge-fixed {
+      position: fixed;
+      top: 18px;
+      right: 26px;
+      z-index: 150;
+      background: var(--card);
+      color: var(--text);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      border-radius: 999px;
+      padding: 10px 16px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .01em;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .update-badge-fixed::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 0 4px rgba(0,166,223,.14);
+    }
+    @media (max-width: 980px) {
+      .update-badge-fixed {
+        position: static;
+        margin: 14px 18px 0;
+        width: calc(100% - 36px);
+        justify-content: center;
+      }
+    }
+
+    /* Bloqueio da aba Insights */
+    .insights-lock {
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      min-height:420px;
+      padding:24px;
+    }
+    .insights-lock-card {
+      width:min(460px, 100%);
+      background:var(--card);
+      border:1px solid var(--border);
+      box-shadow:var(--shadow);
+      border-radius:28px;
+      padding:32px;
+      text-align:center;
+    }
+    .insights-lock-icon {
+      width:58px;
+      height:58px;
+      margin:0 auto 16px;
+      border-radius:18px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:linear-gradient(135deg, rgba(0,166,223,.18), rgba(249,189,0,.18));
+      color:var(--primary);
+      font-size:28px;
+      font-weight:800;
+    }
+    .insights-lock-card h2 {
+      margin:0 0 8px;
+      color:var(--text);
+      font-size:24px;
+      font-weight:800;
+    }
+    .insights-lock-card p {
+      margin:0 0 20px;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.55;
+    }
+    .insights-lock-card input {
+      width:100%;
+      margin-bottom:12px;
+      text-align:center;
+      font-weight:600;
+    }
+    .insights-lock-card button {
+      width:100%;
+      border:none;
+      border-radius:14px;
+      padding:13px 16px;
+      background:var(--accent);
+      color:#fff;
+      font-weight:800;
+      cursor:pointer;
+      font-size:15px;
+      transition:.2s ease;
+    }
+    .insights-lock-card button:hover {
+      background:var(--secondary);
+      transform:translateY(-1px);
+    }
+    .insights-error {
+      display:none;
+      margin-top:12px;
+      color:var(--danger);
+      font-size:13px;
+      font-weight:800;
+    }
+    .insights-error.active { display:block; }
+    .insights-content.locked { display:none; }
+
   </style>
 </head>
 <body data-theme="light">
+  <div class="update-badge-fixed">Disparos atualizados até 13/04/2026</div>
+
   <div class="app">
     <aside class="sidebar">
       <div class="brand">
@@ -432,10 +640,16 @@
               <label for="filterType">Tipo de campanha</label>
               <select id="filterType">
                 <option value="">Todos</option>
-                <option>Webinar</option>
                 <option>Treinamento</option>
-                <option>Suporte</option>
+                <option>Novidade da plataforma</option>
+                <option>Atualização de Treinamento</option>
+                <option>Scorm</option>
+                <option>Ações de Engajamento</option>
+                <option>Medportal PRO</option>
                 <option>Informativo</option>
+                <option>Webinar</option>
+                <option>Suporte</option>
+                <option>Medportal Conecta</option>
               </select>
             </div>
             <div class="filter-group">
@@ -464,7 +678,7 @@
             <div class="card-head">
               <div>
                 <h3>Evolução mensal</h3>
-                <p>E-mails enviados, taxa média de abertura e taxa média de clique por mês de disparo.</p>
+                <p>Volume total enviado por mês combinado com taxa média de abertura e CTR, facilitando a leitura de volume versus performance.</p>
               </div>
             </div>
             <div class="chart-wrap"><canvas id="monthlyChart"></canvas></div>
@@ -485,19 +699,6 @@
           </div>
         </div>
 
-        <div class="grid-2">
-          <div class="chart-card">
-            <div class="card-head">
-              <div>
-                <h3>Distribuição de CTR</h3>
-                <p>Percentual de e-mails com CTR zerado, baixo, médio ou alto.</p>
-              </div>
-            </div>
-            <div class="chart-wrap small"><canvas id="distributionChart"></canvas></div>
-          </div>
-
-          <div class="callout" id="overviewCallout"></div>
-        </div>
 
         <div class="table-card">
           <div class="card-head">
@@ -572,6 +773,22 @@
               <p>Resumo por dia e horário com média de abertura, média de CTR e volume de disparos.</p>
             </div>
           </div>
+          <div class="schedule-table-filters">
+            <div class="filter-grid">
+              <div class="filter-group">
+                <label for="scheduleDayFilter">Filtrar por dia da semana</label>
+                <select id="scheduleDayFilter">
+                  <option value="">Todos os dias</option>
+                </select>
+              </div>
+              <div class="filter-group">
+                <label for="scheduleHourFilter">Filtrar por horário</label>
+                <select id="scheduleHourFilter">
+                  <option value="">Todos os horários</option>
+                </select>
+              </div>
+            </div>
+          </div>
           <div class="table-scroll">
             <table id="scheduleTable">
               <thead></thead>
@@ -611,10 +828,16 @@
               <label for="rankingType">Tipo de campanha</label>
               <select id="rankingType">
                 <option value="">Todos</option>
-                <option>Webinar</option>
                 <option>Treinamento</option>
-                <option>Suporte</option>
+                <option>Novidade da plataforma</option>
+                <option>Atualização de Treinamento</option>
+                <option>Scorm</option>
+                <option>Ações de Engajamento</option>
+                <option>Medportal PRO</option>
                 <option>Informativo</option>
+                <option>Webinar</option>
+                <option>Suporte</option>
+                <option>Medportal Conecta</option>
               </select>
             </div>
           </div>
@@ -633,11 +856,11 @@
           <div class="chart-card">
             <div class="card-head">
               <div>
-                <h3>Dispersão: abertura × CTR</h3>
-                <p>Outliers ajudam a identificar campanhas com forte interesse, baixa conversão ou excelente equilíbrio entre as duas métricas.</p>
+                <h3>Menores taxas de abertura</h3>
+                <p>Lista dos disparos que menos despertaram abertura, para priorizar revisão de assunto, segmentação e horário.</p>
               </div>
             </div>
-            <div class="chart-wrap"><canvas id="scatterChart"></canvas></div>
+            <div id="lowOpenRanking" class="ranking-list"></div>
           </div>
         </div>
 
@@ -645,7 +868,59 @@
           <div class="card-head">
             <div>
               <h3>Tabela comparativa</h3>
-              <p>Assunto, tipo, desempenho e comparação com a média geral da base. Como a planilha enviada não traz o corpo do e-mail, a visualização está baseada no assunto e nos indicadores.</p>
+              <p>Assunto, tipo, desempenho e comparação com a média geral da base. Use os filtros abaixo para encontrar e-mails com baixa abertura, CTR zerado ou menor engajamento.</p>
+            </div>
+          </div>
+          <div class="filters-card" style="box-shadow:none;margin-bottom:16px;">
+            <div class="filter-grid">
+              <div class="filter-group">
+                <label for="rankingTableSearch">Buscar por assunto</label>
+                <input id="rankingTableSearch" type="text" placeholder="Digite parte do assunto">
+              </div>
+              <div class="filter-group">
+                <label for="rankingTableType">Tipo de campanha</label>
+                <select id="rankingTableType">
+                  <option value="">Todos</option>
+                  <option>Treinamento</option>
+                  <option>Novidade da plataforma</option>
+                  <option>Atualização de Treinamento</option>
+                  <option>Scorm</option>
+                  <option>Ações de Engajamento</option>
+                  <option>Medportal PRO</option>
+                  <option>Informativo</option>
+                  <option>Webinar</option>
+                  <option>Suporte</option>
+                  <option>Medportal Conecta</option>
+                </select>
+              </div>
+              <div class="filter-group">
+                <label for="rankingOpenFilter">Abertura</label>
+                <select id="rankingOpenFilter">
+                  <option value="">Todas</option>
+                  <option value="low25">Baixa abertura (&lt; 25%)</option>
+                  <option value="belowAvg">Abaixo da média geral</option>
+                  <option value="highOpenLowClick">Boa abertura e baixo clique</option>
+                </select>
+              </div>
+              <div class="filter-group">
+                <label for="rankingEngagementFilter">Engajamento</label>
+                <select id="rankingEngagementFilter">
+                  <option value="">Todos</option>
+                  <option value="zeroCtr">CTR zerado</option>
+                  <option value="lowCtr">CTR baixo (&lt; 2%)</option>
+                  <option value="zeroClicks">Sem cliques</option>
+                </select>
+              </div>
+              <div class="filter-group">
+                <label for="rankingSortMode">Ordenar por</label>
+                <select id="rankingSortMode">
+                  <option value="openAsc">Menor abertura primeiro</option>
+                  <option value="openDesc">Maior abertura primeiro</option>
+                  <option value="ctrAsc">Menor CTR primeiro</option>
+                  <option value="ctrDesc">Maior CTR primeiro</option>
+                  <option value="clicksDesc">Mais cliques primeiro</option>
+                </select>
+              </div>
             </div>
           </div>
           <div class="table-scroll">
@@ -658,6 +933,19 @@
       </section>
 
       <section class="section" id="insights">
+        <div id="insightsLock" class="insights-lock">
+          <div class="insights-lock-card">
+            <div class="insights-lock-icon">🔒</div>
+            <h2>Acesso restrito</h2>
+            <p>Digite a senha para visualizar a aba de Insights estratégicos.</p>
+            <input id="insightsPassword" type="password" placeholder="Senha de acesso" autocomplete="current-password">
+            <button id="insightsUnlockBtn" type="button">Entrar</button>
+            <div id="insightsError" class="insights-error">Senha incorreta. Tente novamente.</div>
+          </div>
+        </div>
+
+        <div id="insightsContent" class="insights-content locked">
+
         <div class="section-header">
           <div class="title-wrap">
             <h1>Dashboard</h1>
@@ -670,7 +958,8 @@
 
         <div class="insights-grid" id="insightsGrid"></div>
         <div class="callout" id="strategyCallout"></div>
-      </section>
+        </div>
+</section>
     </main>
   </div>
 
@@ -697,12 +986,12 @@
   </div>
 
   <script>
-    const rawData = [{"subject": "Dezembro Vermelho: Prevenção é um ato de cuidado", "date": "2025-12-03", "dateLabel": "03/12/2025", "time": "08:00", "hour": 8, "weekday": "Quarta-feira", "weekdayIndex": 2, "leads": 691, "delivered": 671, "bounce": 20, "opens": 151, "clicks": 0, "deliveryRate": 97.11, "openRate": 22.5, "ctr": 0.0, "campaignType": "Informativo"}, {"subject": "Suporte Medportal com horário reduzido nesta sexta-feira, antecipe suas solicitações!", "date": "2025-12-09", "dateLabel": "09/12/2025", "time": "17:38", "hour": 17, "weekday": "Terça-feira", "weekdayIndex": 1, "leads": 256, "delivered": 242, "bounce": 14, "opens": 78, "clicks": 0, "deliveryRate": 94.53, "openRate": 32.23, "ctr": 0.0, "campaignType": "Suporte"}, {"subject": "Atualização dos Treinamentos Medportal", "date": "2025-12-10", "dateLabel": "10/12/2025", "time": "10:00", "hour": 10, "weekday": "Quarta-feira", "weekdayIndex": 2, "leads": 691, "delivered": 653, "bounce": 38, "opens": 157, "clicks": 0, "deliveryRate": 94.5, "openRate": 24.04, "ctr": 0.0, "campaignType": "Treinamento"}, {"subject": "Como construir uma LNT baseada em dados?", "date": "2025-12-15", "dateLabel": "15/12/2025", "time": "10:00", "hour": 10, "weekday": "Segunda-feira", "weekdayIndex": 0, "leads": 696, "delivered": 657, "bounce": 39, "opens": 177, "clicks": 17, "deliveryRate": 94.4, "openRate": 26.94, "ctr": 2.59, "campaignType": "Informativo"}, {"subject": "Lançamento de Novos Treinamentos Medportal em Gestão e Qualidade", "date": "2025-12-17", "dateLabel": "17/12/2025", "time": "10:00", "hour": 10, "weekday": "Quarta-feira", "weekdayIndex": 2, "leads": 688, "delivered": 660, "bounce": 28, "opens": 148, "clicks": 0, "deliveryRate": 95.93, "openRate": 22.42, "ctr": 0.0, "campaignType": "Treinamento"}, {"subject": "Lançamento no Medportal: O seu Aplicativo de Inteligência Artificial  ??", "date": "2025-12-19", "dateLabel": "19/12/2025", "time": "15:32", "hour": 15, "weekday": "Sexta-feira", "weekdayIndex": 4, "leads": 694, "delivered": 661, "bounce": 33, "opens": 142, "clicks": 22, "deliveryRate": 95.24, "openRate": 21.48, "ctr": 3.33, "campaignType": "Informativo"}, {"subject": "Atualização de Treinamento: Cuidados com Traqueostomia", "date": "2025-12-22", "dateLabel": "22/12/2025", "time": "10:00", "hour": 10, "weekday": "Segunda-feira", "weekdayIndex": 0, "leads": 687, "delivered": 655, "bounce": 32, "opens": 156, "clicks": 0, "deliveryRate": 95.34, "openRate": 23.82, "ctr": 0.0, "campaignType": "Treinamento"}, {"subject": "Janeiro Branco 2026: Saúde Mental como Prática no Ambiente Hospitalar", "date": "2025-12-29", "dateLabel": "29/12/2025", "time": "10:00", "hour": 10, "weekday": "Segunda-feira", "weekdayIndex": 0, "leads": 696, "delivered": 662, "bounce": 34, "opens": 165, "clicks": 0, "deliveryRate": 95.11, "openRate": 24.92, "ctr": 0.0, "campaignType": "Informativo"}, {"subject": "Novos Treinamentos Disponíveis do Pacote Ferramentas de Gestão", "date": "2026-01-06", "dateLabel": "06/01/2026", "time": "10:00", "hour": 10, "weekday": "Terça-feira", "weekdayIndex": 1, "leads": 696, "delivered": 665, "bounce": 31, "opens": 162, "clicks": 0, "deliveryRate": 95.55, "openRate": 24.36, "ctr": 0.0, "campaignType": "Treinamento"}, {"subject": "Atualização de treinamentos: Comunicação Assertiva, Gestão de Indicadores e Mapeamento de processos", "date": "2026-01-12", "dateLabel": "12/01/2026", "time": "10:00", "hour": 10, "weekday": "Segunda-feira", "weekdayIndex": 0, "leads": 684, "delivered": 659, "bounce": 25, "opens": 160, "clicks": 0, "deliveryRate": 96.35, "openRate": 24.28, "ctr": 0.0, "campaignType": "Treinamento"}, {"subject": "Integração de Novos Colaboradores com o Medportal", "date": "2026-01-15", "dateLabel": "15/01/2026", "time": "10:00", "hour": 10, "weekday": "Quinta-feira", "weekdayIndex": 3, "leads": 673, "delivered": 630, "bounce": 43, "opens": 189, "clicks": 7, "deliveryRate": 93.61, "openRate": 30.0, "ctr": 1.11, "campaignType": "Informativo"}, {"subject": "Boas Práticas na Segmentação de Alunos na Plataforma", "date": "2026-01-28", "dateLabel": "28/01/2026", "time": "14:47", "hour": 14, "weekday": "Quarta-feira", "weekdayIndex": 2, "leads": 268, "delivered": 260, "bounce": 8, "opens": 100, "clicks": 6, "deliveryRate": 97.01, "openRate": 38.46, "ctr": 2.31, "campaignType": "Informativo"}, {"subject": "Nova funcionalidade: Solicitação de Conteúdos pela plataforma", "date": "2026-01-30", "dateLabel": "30/01/2026", "time": "10:00", "hour": 10, "weekday": "Sexta-feira", "weekdayIndex": 4, "leads": 679, "delivered": 655, "bounce": 24, "opens": 204, "clicks": 0, "deliveryRate": 96.47, "openRate": 31.15, "ctr": 0.0, "campaignType": "Treinamento"}, {"subject": "Convite Exclusivo | Webinar: Como Medir a Eficácia dos Treinamentos?", "date": "2026-02-02", "dateLabel": "02/02/2026", "time": "16:45", "hour": 16, "weekday": "Segunda-feira", "weekdayIndex": 0, "leads": 783, "delivered": 765, "bounce": 18, "opens": 196, "clicks": 66, "deliveryRate": 97.7, "openRate": 25.62, "ctr": 8.63, "campaignType": "Webinar"}, {"subject": "[Suporte Medportal] Avalie nosso atendimento (leva menos de 1 minuto)", "date": "2026-02-03", "dateLabel": "03/02/2026", "time": "15:03", "hour": 15, "weekday": "Terça-feira", "weekdayIndex": 1, "leads": 69, "delivered": 69, "bounce": 0, "opens": 22, "clicks": 8, "deliveryRate": 100.0, "openRate": 31.88, "ctr": 11.59, "campaignType": "Suporte"}, {"subject": "Revisão Mensal de Educação Digital", "date": "2026-02-06", "dateLabel": "06/02/2026", "time": "16:38", "hour": 16, "weekday": "Sexta-feira", "weekdayIndex": 4, "leads": 268, "delivered": 260, "bounce": 8, "opens": 97, "clicks": 27, "deliveryRate": 97.01, "openRate": 37.31, "ctr": 10.38, "campaignType": "Informativo"}, {"subject": "Medportal Academy: Atualização dos treinamentos NR-32", "date": "2026-02-09", "dateLabel": "09/02/2026", "time": "12:34", "hour": 12, "weekday": "Segunda-feira", "weekdayIndex": 0, "leads": 704, "delivered": 682, "bounce": 22, "opens": 179, "clicks": 0, "deliveryRate": 96.88, "openRate": 26.25, "ctr": 0.0, "campaignType": "Treinamento"}, {"subject": "Suporte Medportal: Atendimento no Carnaval", "date": "2026-02-11", "dateLabel": "11/02/2026", "time": "17:00", "hour": 17, "weekday": "Quarta-feira", "weekdayIndex": 2, "leads": 268, "delivered": 260, "bounce": 8, "opens": 77, "clicks": 0, "deliveryRate": 97.01, "openRate": 29.62, "ctr": 0.0, "campaignType": "Suporte"}, {"subject": "Webinar Medportal | Como medir a eficácia dos treinamentos?", "date": "2026-02-12", "dateLabel": "12/02/2026", "time": "10:00", "hour": 10, "weekday": "Quinta-feira", "weekdayIndex": 3, "leads": 781, "delivered": 753, "bounce": 28, "opens": 173, "clicks": 47, "deliveryRate": 96.41, "openRate": 22.97, "ctr": 6.24, "campaignType": "Webinar"}, {"subject": "[Suporte Medportal] Avalie nosso atendimento (leva menos de 1 minuto)", "date": "2026-02-19", "dateLabel": "19/02/2026", "time": "16:30", "hour": 16, "weekday": "Quinta-feira", "weekdayIndex": 3, "leads": 43, "delivered": 43, "bounce": 0, "opens": 14, "clicks": 4, "deliveryRate": 100.0, "openRate": 32.56, "ctr": 9.3, "campaignType": "Suporte"}, {"subject": "Como Utilizar os Cursos do Medportal Academy", "date": "2026-02-23", "dateLabel": "23/02/2026", "time": "16:09", "hour": 16, "weekday": "Segunda-feira", "weekdayIndex": 0, "leads": 266, "delivered": 263, "bounce": 3, "opens": 80, "clicks": 18, "deliveryRate": 98.87, "openRate": 30.42, "ctr": 6.84, "campaignType": "Treinamento"}, {"subject": "Atualização de Treinamentos Conforme as Diretrizes da American Heart Association (AHA)", "date": "2026-02-24", "dateLabel": "24/02/2026", "time": "10:41", "hour": 10, "weekday": "Terça-feira", "weekdayIndex": 1, "leads": 701, "delivered": 684, "bounce": 17, "opens": 172, "clicks": 0, "deliveryRate": 97.57, "openRate": 25.15, "ctr": 0.0, "campaignType": "Treinamento"}, {"subject": "Webinar Exclusivo Medportal | É amanhã", "date": "2026-02-25", "dateLabel": "25/02/2026", "time": "15:58", "hour": 15, "weekday": "Quarta-feira", "weekdayIndex": 2, "leads": 116, "delivered": 113, "bounce": 3, "opens": 61, "clicks": 15, "deliveryRate": 97.41, "openRate": 53.98, "ctr": 13.27, "campaignType": "Webinar"}, {"subject": "Webinar Exclusivo Medportal já vai começar!", "date": "2026-02-26", "dateLabel": "26/02/2026", "time": "12:55", "hour": 12, "weekday": "Quinta-feira", "weekdayIndex": 3, "leads": 121, "delivered": 120, "bounce": 1, "opens": 59, "clicks": 39, "deliveryRate": 99.17, "openRate": 49.17, "ctr": 32.5, "campaignType": "Webinar"}, {"subject": "Webinar Exclusivo Medportal já começou!", "date": "2026-02-26", "dateLabel": "26/02/2026", "time": "14:34", "hour": 14, "weekday": "Quinta-feira", "weekdayIndex": 3, "leads": 125, "delivered": 124, "bounce": 1, "opens": 53, "clicks": 2, "deliveryRate": 99.2, "openRate": 42.74, "ctr": 1.61, "campaignType": "Webinar"}, {"subject": "Webinar Exclusivo | Sua opinião é muito importante", "date": "2026-02-26", "dateLabel": "26/02/2026", "time": "15:40", "hour": 15, "weekday": "Quinta-feira", "weekdayIndex": 3, "leads": 125, "delivered": 124, "bounce": 1, "opens": 48, "clicks": 13, "deliveryRate": 99.2, "openRate": 38.71, "ctr": 10.48, "campaignType": "Webinar"}, {"subject": "Redução de Glosas: Proposta de Trilha Estratégica para sua Instituição", "date": "2026-03-02", "dateLabel": "02/03/2026", "time": "12:38", "hour": 12, "weekday": "Segunda-feira", "weekdayIndex": 0, "leads": 747, "delivered": 717, "bounce": 30, "opens": 192, "clicks": 2, "deliveryRate": 95.98, "openRate": 26.78, "ctr": 0.28, "campaignType": "Informativo"}, {"subject": "Menos operação na plataforma Medportal, mais visão estratégica!", "date": "2026-03-09", "dateLabel": "09/03/2026", "time": "12:00", "hour": 12, "weekday": "Segunda-feira", "weekdayIndex": 0, "leads": 270, "delivered": 265, "bounce": 5, "opens": 79, "clicks": 3, "deliveryRate": 98.15, "openRate": 29.81, "ctr": 1.13, "campaignType": "Informativo"}, {"subject": "Comunicação entre equipes: um ponto crítico para a segurança do cuidado", "date": "2026-03-13", "dateLabel": "13/03/2026", "time": "16:22", "hour": 16, "weekday": "Sexta-feira", "weekdayIndex": 4, "leads": 731, "delivered": 703, "bounce": 27, "opens": 186, "clicks": 0, "deliveryRate": 96.3, "openRate": 26.46, "ctr": 0.0, "campaignType": "Informativo"}, {"subject": "Novo treinamento Medportal: Suporte Básico de Vida Intra-hospitalar - AHA 2025", "date": "2026-03-16", "dateLabel": "16/03/2026", "time": "16:06", "hour": 16, "weekday": "Segunda-feira", "weekdayIndex": 0, "leads": 777, "delivered": 760, "bounce": 17, "opens": 213, "clicks": 1, "deliveryRate": 97.81, "openRate": 28.03, "ctr": 0.13, "campaignType": "Suporte"}, {"subject": "Novo treinamento Medportal: Atualizações do Caderno ONA 2025", "date": "2026-03-18", "dateLabel": "18/03/2026", "time": "11:00", "hour": 11, "weekday": "Quarta-feira", "weekdayIndex": 2, "leads": 776, "delivered": 759, "bounce": 17, "opens": 192, "clicks": 0, "deliveryRate": 97.81, "openRate": 25.3, "ctr": 0.0, "campaignType": "Treinamento"}, {"subject": "Abril Laranja 2026: Segurança do Paciente: Atitudes Individuais, Resultados Institucionais", "date": "2026-03-20", "dateLabel": "20/03/2026", "time": "11:05", "hour": 11, "weekday": "Sexta-feira", "weekdayIndex": 4, "leads": 773, "delivered": 757, "bounce": 16, "opens": 195, "clicks": 0, "deliveryRate": 97.93, "openRate": 25.76, "ctr": 0.0, "campaignType": "Informativo"}, {"subject": "Novos Conteúdos Medportal: Segurança do paciente começa no cálculo correto de medicamentos", "date": "2026-03-30", "dateLabel": "30/03/2026", "time": "17:41", "hour": 17, "weekday": "Segunda-feira", "weekdayIndex": 0, "leads": 802, "delivered": 781, "bounce": 21, "opens": 209, "clicks": 1, "deliveryRate": 97.38, "openRate": 26.76, "ctr": 0.13, "campaignType": "Treinamento"}, {"subject": "Evolução na biblioteca Medportal: conteúdos agora em SCORM", "date": "2026-03-31", "dateLabel": "31/03/2026", "time": "13:00", "hour": 13, "weekday": "Terça-feira", "weekdayIndex": 1, "leads": 768, "delivered": 725, "bounce": 43, "opens": 176, "clicks": 29, "deliveryRate": 94.4, "openRate": 24.28, "ctr": 4.0, "campaignType": "Treinamento"}, {"subject": "Atualização de Conteúdo Medportal | Treinamento ONA - 2026", "date": "2026-04-01", "dateLabel": "01/04/2026", "time": "14:00", "hour": 14, "weekday": "Quarta-feira", "weekdayIndex": 2, "leads": 798, "delivered": 780, "bounce": 18, "opens": 218, "clicks": 2, "deliveryRate": 97.74, "openRate": 27.95, "ctr": 0.26, "campaignType": "Treinamento"}, {"subject": "Novos Conteúdos Medportal: Google Sheets na prática", "date": "2026-04-06", "dateLabel": "06/04/2026", "time": "14:00", "hour": 14, "weekday": "Segunda-feira", "weekdayIndex": 0, "leads": 800, "delivered": 784, "bounce": 16, "opens": 205, "clicks": 1, "deliveryRate": 98.0, "openRate": 26.15, "ctr": 0.13, "campaignType": "Treinamento"}, {"subject": "Uma nova experiência está chegando no Medportal", "date": "2026-04-09", "dateLabel": "09/04/2026", "time": "15:01", "hour": 15, "weekday": "Quinta-feira", "weekdayIndex": 3, "leads": 98, "delivered": 95, "bounce": 3, "opens": 26, "clicks": 8, "deliveryRate": 96.94, "openRate": 27.37, "ctr": 8.42, "campaignType": "Informativo"}, {"subject": "Uma nova experiência está chegando no Medportal", "date": "2026-04-09", "dateLabel": "09/04/2026", "time": "16:50", "hour": 16, "weekday": "Quinta-feira", "weekdayIndex": 3, "leads": 104, "delivered": 101, "bounce": 3, "opens": 34, "clicks": 8, "deliveryRate": 97.12, "openRate": 33.66, "ctr": 7.92, "campaignType": "Informativo"}, {"subject": "Uma nova experiência está chegando no Medportal", "date": "2026-04-09", "dateLabel": "09/04/2026", "time": "17:00", "hour": 17, "weekday": "Quinta-feira", "weekdayIndex": 3, "leads": 57, "delivered": 57, "bounce": 0, "opens": 19, "clicks": 8, "deliveryRate": 100.0, "openRate": 33.33, "ctr": 14.04, "campaignType": "Informativo"}, {"subject": "Novo Treinamento Medportal: Gestão Hospitalar Baseada em Dados: Indicadores Chave de Desempenho Hospitalares", "date": "2026-04-13", "dateLabel": "13/04/2026", "time": "15:58", "hour": 15, "weekday": "Segunda-feira", "weekdayIndex": 0, "leads": 799, "delivered": 787, "bounce": 12, "opens": 195, "clicks": 1, "deliveryRate": 98.5, "openRate": 24.78, "ctr": 0.13, "campaignType": "Treinamento"}];
+    const rawData = [{"subject": "Novo Treinamento Medportal: Gestão Hospitalar Baseada em Dados: Indicadores Chave de Desempenho Hospitalares", "date": "2026-04-13", "dateLabel": "13/04/2026", "time": "15:58", "hour": 15, "weekday": "Segunda-feira", "weekdayIndex": 0, "leads": 799, "delivered": 787, "bounce": 12, "opens": 195, "clicks": 1, "deliveryRate": 98.5, "openRate": 24.78, "ctr": 0.13, "campaignType": "Treinamento"}, {"subject": "Uma nova experiência está chegando no Medportal", "date": "2026-04-09", "dateLabel": "09/04/2026", "time": "17:00", "hour": 17, "weekday": "Quinta-feira", "weekdayIndex": 3, "leads": 57, "delivered": 57, "bounce": 0, "opens": 19, "clicks": 8, "deliveryRate": 100.0, "openRate": 33.33, "ctr": 14.04, "campaignType": "Novidade da plataforma"}, {"subject": "Uma nova experiência está chegando no Medportal", "date": "2026-04-09", "dateLabel": "09/04/2026", "time": "16:50", "hour": 16, "weekday": "Quinta-feira", "weekdayIndex": 3, "leads": 104, "delivered": 101, "bounce": 3, "opens": 34, "clicks": 8, "deliveryRate": 97.12, "openRate": 33.66, "ctr": 7.92, "campaignType": "Novidade da plataforma"}, {"subject": "Uma nova experiência está chegando no Medportal", "date": "2026-04-09", "dateLabel": "09/04/2026", "time": "15:01", "hour": 15, "weekday": "Quinta-feira", "weekdayIndex": 3, "leads": 98, "delivered": 95, "bounce": 3, "opens": 26, "clicks": 8, "deliveryRate": 96.94, "openRate": 27.37, "ctr": 8.42, "campaignType": "Novidade da plataforma"}, {"subject": "Novos Conteúdos Medportal: Google Sheets na prática", "date": "2026-04-06", "dateLabel": "06/04/2026", "time": "14:00", "hour": 14, "weekday": "Segunda-feira", "weekdayIndex": 0, "leads": 800, "delivered": 784, "bounce": 16, "opens": 205, "clicks": 1, "deliveryRate": 98.0, "openRate": 26.15, "ctr": 0.13, "campaignType": "Treinamento"}, {"subject": "Atualização de Conteúdo Medportal | Treinamento ONA - 2026", "date": "2026-04-01", "dateLabel": "01/04/2026", "time": "14:00", "hour": 14, "weekday": "Quarta-feira", "weekdayIndex": 2, "leads": 798, "delivered": 780, "bounce": 18, "opens": 218, "clicks": 2, "deliveryRate": 97.74, "openRate": 27.95, "ctr": 0.26, "campaignType": "Atualização de Treinamento"}, {"subject": "Evolução na biblioteca Medportal: conteúdos agora em SCORM", "date": "2026-03-31", "dateLabel": "31/03/2026", "time": "13:00", "hour": 13, "weekday": "Terça-feira", "weekdayIndex": 1, "leads": 768, "delivered": 725, "bounce": 43, "opens": 176, "clicks": 29, "deliveryRate": 94.4, "openRate": 24.28, "ctr": 4.0, "campaignType": "Scorm"}, {"subject": "Novos Conteúdos Medportal: Segurança do paciente começa no cálculo correto de medicamentos", "date": "2026-03-30", "dateLabel": "30/03/2026", "time": "17:41", "hour": 17, "weekday": "Segunda-feira", "weekdayIndex": 0, "leads": 802, "delivered": 781, "bounce": 21, "opens": 209, "clicks": 1, "deliveryRate": 97.38, "openRate": 26.76, "ctr": 0.13, "campaignType": "Treinamento"}, {"subject": "Abril Laranja 2026: Segurança do Paciente: Atitudes Individuais, Resultados Institucionais", "date": "2026-03-20", "dateLabel": "20/03/2026", "time": "11:05", "hour": 11, "weekday": "Sexta-feira", "weekdayIndex": 4, "leads": 773, "delivered": 757, "bounce": 16, "opens": 195, "clicks": 0, "deliveryRate": 97.93, "openRate": 25.76, "ctr": 0.0, "campaignType": "Treinamento"}, {"subject": "Novo treinamento Medportal: Atualizações do Caderno ONA 2025", "date": "2026-03-18", "dateLabel": "18/03/2026", "time": "11:00", "hour": 11, "weekday": "Quarta-feira", "weekdayIndex": 2, "leads": 776, "delivered": 759, "bounce": 17, "opens": 192, "clicks": 0, "deliveryRate": 97.81, "openRate": 25.3, "ctr": 0.0, "campaignType": "Treinamento"}, {"subject": "Novo treinamento Medportal: Suporte Básico de Vida Intra-hospitalar - AHA 2025", "date": "2026-03-16", "dateLabel": "16/03/2026", "time": "16:06", "hour": 16, "weekday": "Segunda-feira", "weekdayIndex": 0, "leads": 777, "delivered": 760, "bounce": 17, "opens": 213, "clicks": 1, "deliveryRate": 97.81, "openRate": 28.03, "ctr": 0.13, "campaignType": "Treinamento"}, {"subject": "Comunicação entre equipes: um ponto crítico para a segurança do cuidado", "date": "2026-03-13", "dateLabel": "13/03/2026", "time": "16:22", "hour": 16, "weekday": "Sexta-feira", "weekdayIndex": 4, "leads": 731, "delivered": 703, "bounce": 27, "opens": 186, "clicks": 0, "deliveryRate": 96.3, "openRate": 26.46, "ctr": 0.0, "campaignType": "Ações de Engajamento"}, {"subject": "Menos operação na plataforma Medportal, mais visão estratégica!", "date": "2026-03-09", "dateLabel": "09/03/2026", "time": "12:00", "hour": 12, "weekday": "Segunda-feira", "weekdayIndex": 0, "leads": 270, "delivered": 265, "bounce": 5, "opens": 79, "clicks": 3, "deliveryRate": 98.15, "openRate": 29.81, "ctr": 1.13, "campaignType": "Medportal PRO"}, {"subject": "Redução de Glosas: Proposta de Trilha Estratégica para sua Instituição", "date": "2026-03-02", "dateLabel": "02/03/2026", "time": "12:38", "hour": 12, "weekday": "Segunda-feira", "weekdayIndex": 0, "leads": 747, "delivered": 717, "bounce": 30, "opens": 192, "clicks": 2, "deliveryRate": 95.98, "openRate": 26.78, "ctr": 0.28, "campaignType": "Informativo"}, {"subject": "Webinar Exclusivo | Sua opinião é muito importante", "date": "2026-02-26", "dateLabel": "26/02/2026", "time": "15:40", "hour": 15, "weekday": "Quinta-feira", "weekdayIndex": 3, "leads": 125, "delivered": 124, "bounce": 1, "opens": 48, "clicks": 13, "deliveryRate": 99.2, "openRate": 38.71, "ctr": 10.48, "campaignType": "Webinar"}, {"subject": "Webinar Exclusivo Medportal já começou!", "date": "2026-02-26", "dateLabel": "26/02/2026", "time": "14:34", "hour": 14, "weekday": "Quinta-feira", "weekdayIndex": 3, "leads": 125, "delivered": 124, "bounce": 1, "opens": 53, "clicks": 2, "deliveryRate": 99.2, "openRate": 42.74, "ctr": 1.61, "campaignType": "Webinar"}, {"subject": "Webinar Exclusivo Medportal já vai começar!", "date": "2026-02-26", "dateLabel": "26/02/2026", "time": "12:55", "hour": 12, "weekday": "Quinta-feira", "weekdayIndex": 3, "leads": 121, "delivered": 120, "bounce": 1, "opens": 59, "clicks": 39, "deliveryRate": 99.17, "openRate": 49.17, "ctr": 32.5, "campaignType": "Webinar"}, {"subject": "Webinar Exclusivo Medportal | É amanhã", "date": "2026-02-25", "dateLabel": "25/02/2026", "time": "15:58", "hour": 15, "weekday": "Quarta-feira", "weekdayIndex": 2, "leads": 116, "delivered": 113, "bounce": 3, "opens": 61, "clicks": 15, "deliveryRate": 97.41, "openRate": 53.98, "ctr": 13.27, "campaignType": "Webinar"}, {"subject": "Atualização de Treinamentos Conforme as Diretrizes da American Heart Association (AHA)", "date": "2026-02-24", "dateLabel": "24/02/2026", "time": "10:41", "hour": 10, "weekday": "Terça-feira", "weekdayIndex": 1, "leads": 701, "delivered": 684, "bounce": 17, "opens": 172, "clicks": 0, "deliveryRate": 97.57, "openRate": 25.15, "ctr": 0.0, "campaignType": "Atualização de Treinamento"}, {"subject": "Como Utilizar os Cursos do Medportal Academy", "date": "2026-02-23", "dateLabel": "23/02/2026", "time": "16:09", "hour": 16, "weekday": "Segunda-feira", "weekdayIndex": 0, "leads": 266, "delivered": 263, "bounce": 3, "opens": 80, "clicks": 18, "deliveryRate": 98.87, "openRate": 30.42, "ctr": 6.84, "campaignType": "Ações de Engajamento"}, {"subject": "[Suporte Medportal] Avalie nosso atendimento (leva menos de 1 minuto)", "date": "2026-02-19", "dateLabel": "19/02/2026", "time": "16:30", "hour": 16, "weekday": "Quinta-feira", "weekdayIndex": 3, "leads": 43, "delivered": 43, "bounce": 0, "opens": 14, "clicks": 4, "deliveryRate": 100.0, "openRate": 32.56, "ctr": 9.3, "campaignType": "Suporte"}, {"subject": "Webinar Medportal | Como medir a eficácia dos treinamentos?", "date": "2026-02-12", "dateLabel": "12/02/2026", "time": "10:00", "hour": 10, "weekday": "Quinta-feira", "weekdayIndex": 3, "leads": 781, "delivered": 753, "bounce": 28, "opens": 173, "clicks": 47, "deliveryRate": 96.41, "openRate": 22.97, "ctr": 6.24, "campaignType": "Webinar"}, {"subject": "Suporte Medportal: Atendimento no Carnaval", "date": "2026-02-11", "dateLabel": "11/02/2026", "time": "17:00", "hour": 17, "weekday": "Quarta-feira", "weekdayIndex": 2, "leads": 268, "delivered": 260, "bounce": 8, "opens": 77, "clicks": 0, "deliveryRate": 97.01, "openRate": 29.62, "ctr": 0.0, "campaignType": "Suporte"}, {"subject": "Medportal Academy: Atualização dos treinamentos NR-32", "date": "2026-02-09", "dateLabel": "09/02/2026", "time": "12:34", "hour": 12, "weekday": "Segunda-feira", "weekdayIndex": 0, "leads": 704, "delivered": 682, "bounce": 22, "opens": 179, "clicks": 0, "deliveryRate": 96.88, "openRate": 26.25, "ctr": 0.0, "campaignType": "Atualização de Treinamento"}, {"subject": "Revisão Mensal de Educação Digital", "date": "2026-02-06", "dateLabel": "06/02/2026", "time": "16:38", "hour": 16, "weekday": "Sexta-feira", "weekdayIndex": 4, "leads": 268, "delivered": 260, "bounce": 8, "opens": 97, "clicks": 27, "deliveryRate": 97.01, "openRate": 37.31, "ctr": 10.38, "campaignType": "Ações de Engajamento"}, {"subject": "[Suporte Medportal] Avalie nosso atendimento (leva menos de 1 minuto)", "date": "2026-02-03", "dateLabel": "03/02/2026", "time": "15:03", "hour": 15, "weekday": "Terça-feira", "weekdayIndex": 1, "leads": 69, "delivered": 69, "bounce": 0, "opens": 22, "clicks": 8, "deliveryRate": 100.0, "openRate": 31.88, "ctr": 11.59, "campaignType": "Suporte"}, {"subject": "Convite Exclusivo | Webinar: Como Medir a Eficácia dos Treinamentos?", "date": "2026-02-02", "dateLabel": "02/02/2026", "time": "16:45", "hour": 16, "weekday": "Segunda-feira", "weekdayIndex": 0, "leads": 783, "delivered": 765, "bounce": 18, "opens": 196, "clicks": 66, "deliveryRate": 97.7, "openRate": 25.62, "ctr": 8.63, "campaignType": "Webinar"}, {"subject": "Nova funcionalidade: Solicitação de Conteúdos pela plataforma", "date": "2026-01-30", "dateLabel": "30/01/2026", "time": "10:00", "hour": 10, "weekday": "Sexta-feira", "weekdayIndex": 4, "leads": 679, "delivered": 655, "bounce": 24, "opens": 204, "clicks": 0, "deliveryRate": 96.47, "openRate": 31.15, "ctr": 0.0, "campaignType": "Novidade da plataforma"}, {"subject": "Boas Práticas na Segmentação de Alunos na Plataforma", "date": "2026-01-28", "dateLabel": "28/01/2026", "time": "14:47", "hour": 14, "weekday": "Quarta-feira", "weekdayIndex": 2, "leads": 268, "delivered": 260, "bounce": 8, "opens": 100, "clicks": 6, "deliveryRate": 97.01, "openRate": 38.46, "ctr": 2.31, "campaignType": "Ações de Engajamento"}, {"subject": "Integração de Novos Colaboradores com o Medportal", "date": "2026-01-15", "dateLabel": "15/01/2026", "time": "10:00", "hour": 10, "weekday": "Quinta-feira", "weekdayIndex": 3, "leads": 673, "delivered": 630, "bounce": 43, "opens": 189, "clicks": 7, "deliveryRate": 93.61, "openRate": 30.0, "ctr": 1.11, "campaignType": "Ações de Engajamento"}, {"subject": "Atualização de treinamentos: Comunicação Assertiva, Gestão de Indicadores e Mapeamento de processos", "date": "2026-01-12", "dateLabel": "12/01/2026", "time": "10:00", "hour": 10, "weekday": "Segunda-feira", "weekdayIndex": 0, "leads": 684, "delivered": 659, "bounce": 25, "opens": 160, "clicks": 0, "deliveryRate": 96.35, "openRate": 24.28, "ctr": 0.0, "campaignType": "Atualização de Treinamento"}, {"subject": "Novos Treinamentos Disponíveis do Pacote Ferramentas de Gestão", "date": "2026-01-06", "dateLabel": "06/01/2026", "time": "10:00", "hour": 10, "weekday": "Terça-feira", "weekdayIndex": 1, "leads": 696, "delivered": 665, "bounce": 31, "opens": 162, "clicks": 0, "deliveryRate": 95.55, "openRate": 24.36, "ctr": 0.0, "campaignType": "Treinamento"}, {"subject": "Janeiro Branco 2026: Saúde Mental como Prática no Ambiente Hospitalar", "date": "2025-12-29", "dateLabel": "29/12/2025", "time": "10:00", "hour": 10, "weekday": "Segunda-feira", "weekdayIndex": 0, "leads": 696, "delivered": 662, "bounce": 34, "opens": 165, "clicks": 0, "deliveryRate": 95.11, "openRate": 24.92, "ctr": 0.0, "campaignType": "Treinamento"}, {"subject": "Atualização de Treinamento: Cuidados com Traqueostomia", "date": "2025-12-22", "dateLabel": "22/12/2025", "time": "10:00", "hour": 10, "weekday": "Segunda-feira", "weekdayIndex": 0, "leads": 687, "delivered": 655, "bounce": 32, "opens": 156, "clicks": 0, "deliveryRate": 95.34, "openRate": 23.82, "ctr": 0.0, "campaignType": "Atualização de Treinamento"}, {"subject": "Lançamento no Medportal: O seu Aplicativo de Inteligência Artificial  ??", "date": "2025-12-19", "dateLabel": "19/12/2025", "time": "15:32", "hour": 15, "weekday": "Sexta-feira", "weekdayIndex": 4, "leads": 694, "delivered": 661, "bounce": 33, "opens": 142, "clicks": 22, "deliveryRate": 95.24, "openRate": 21.48, "ctr": 3.33, "campaignType": "Medportal Conecta"}, {"subject": "Lançamento de Novos Treinamentos Medportal em Gestão e Qualidade", "date": "2025-12-17", "dateLabel": "17/12/2025", "time": "10:00", "hour": 10, "weekday": "Quarta-feira", "weekdayIndex": 2, "leads": 688, "delivered": 660, "bounce": 28, "opens": 148, "clicks": 0, "deliveryRate": 95.93, "openRate": 22.42, "ctr": 0.0, "campaignType": "Treinamento"}, {"subject": "Como construir uma LNT baseada em dados?", "date": "2025-12-15", "dateLabel": "15/12/2025", "time": "10:00", "hour": 10, "weekday": "Segunda-feira", "weekdayIndex": 0, "leads": 696, "delivered": 657, "bounce": 39, "opens": 177, "clicks": 17, "deliveryRate": 94.4, "openRate": 26.94, "ctr": 2.59, "campaignType": "Informativo"}, {"subject": "Atualização dos Treinamentos Medportal", "date": "2025-12-10", "dateLabel": "10/12/2025", "time": "10:00", "hour": 10, "weekday": "Quarta-feira", "weekdayIndex": 2, "leads": 691, "delivered": 653, "bounce": 38, "opens": 157, "clicks": 0, "deliveryRate": 94.5, "openRate": 24.04, "ctr": 0.0, "campaignType": "Atualização de Treinamento"}, {"subject": "Suporte Medportal com horário reduzido nesta sexta-feira, antecipe suas solicitações!", "date": "2025-12-09", "dateLabel": "09/12/2025", "time": "17:38", "hour": 17, "weekday": "Terça-feira", "weekdayIndex": 1, "leads": 256, "delivered": 242, "bounce": 14, "opens": 78, "clicks": 0, "deliveryRate": 94.53, "openRate": 32.23, "ctr": 0.0, "campaignType": "Suporte"}, {"subject": "Dezembro Vermelho: Prevenção é um ato de cuidado", "date": "2025-12-03", "dateLabel": "03/12/2025", "time": "08:00", "hour": 8, "weekday": "Quarta-feira", "weekdayIndex": 2, "leads": 691, "delivered": 671, "bounce": 20, "opens": 151, "clicks": 0, "deliveryRate": 97.11, "openRate": 22.5, "ctr": 0.0, "campaignType": "Treinamento"}];
 
     const helpTexts = {
       geral: "Esta seção responde o que foi feito e como os e-mails performaram no geral. Todos os KPIs, gráficos e a tabela refletem os filtros aplicados no topo.",
       horarios: "Esta seção cruza dia da semana e horário para indicar as melhores janelas de envio. A leitura deve considerar tanto abertura quanto CTR para evitar decisões baseadas em curiosidade sem clique.",
-      ranking: "Esta seção mostra o que funciona e o que precisa mudar. O ideal é usar o ranking com a dispersão: abertura alta e CTR baixa pode indicar assunto forte, mas CTA fraco ou proposta pouco clara.",
+      ranking: "Esta seção mostra o que funciona e o que precisa mudar. Use o ranking em barras, a lista de menores aberturas e os filtros da tabela para priorizar ajustes de assunto, segmentação, horário e CTA.",
       insights: "Esta seção traduz padrão em ação. O foco não é só descrever números, mas sugerir ajustes de segmentação, agenda, CTA e testes práticos para a próxima rodada."
     };
 
@@ -726,6 +1015,11 @@
 
     const formatInt = value => new Intl.NumberFormat('pt-BR').format(value || 0);
     const formatPct = value => `${Number(value || 0).toFixed(2).replace('.', ',')}%`;
+    const escapeAttr = value => String(value ?? '')
+      .replace(/&/g, '&amp;')
+      .replace(/"/g, '&quot;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
     const average = arr => arr.length ? arr.reduce((acc, val) => acc + Number(val || 0), 0) / arr.length : 0;
     const sumBy = (arr, key) => arr.reduce((acc, item) => acc + Number(item[key] || 0), 0);
     const dayOrder = ["Segunda-feira","Terça-feira","Quarta-feira","Quinta-feira","Sexta-feira","Sábado","Domingo"];
@@ -763,10 +1057,16 @@
 
     function typeColor(type) {
       return {
-        Webinar: '#00A6DF',
-        Treinamento: '#253F85',
-        Suporte: '#F9BD00',
-        Informativo: '#5B8DEF'
+        'Treinamento': '#253F85',
+        'Novidade da plataforma': '#00A6DF',
+        'Atualização de Treinamento': '#5B8DEF',
+        'Scorm': '#F9BD00',
+        'Ações de Engajamento': '#16a34a',
+        'Medportal PRO': '#7c3aed',
+        'Informativo': '#64748b',
+        'Webinar': '#0ea5e9',
+        'Suporte': '#f59e0b',
+        'Medportal Conecta': '#ec4899'
       }[type] || '#00A6DF';
     }
 
@@ -838,25 +1138,80 @@
         const [year, mon] = month.split('-');
         return new Date(Number(year), Number(mon)-1, 1).toLocaleDateString('pt-BR', { month:'short', year:'2-digit' });
       });
-      const monthlySent = months.map(month => monthMap[month].length);
+      const monthlySent = months.map(month => sumBy(monthMap[month], 'leads'));
       const monthlyOpen = months.map(month => average(monthMap[month].map(item => item.openRate)));
       const monthlyCtr = months.map(month => average(monthMap[month].map(item => item.ctr)));
 
       upsertChart('monthlyChart', 'bar', {
         labels: monthLabels,
         datasets: [
-          { label:'E-mails enviados', data: monthlySent, backgroundColor:'#253F85', borderRadius:10, yAxisID:'y' },
-          { label:'Taxa de abertura', data: monthlyOpen, type:'line', borderColor:'#00A6DF', backgroundColor:'#00A6DF', tension:.35, yAxisID:'y1' },
-          { label:'CTR', data: monthlyCtr, type:'line', borderColor:'#F9BD00', backgroundColor:'#F9BD00', tension:.35, yAxisID:'y1' }
+          {
+            label:'Leads selecionados / e-mails enviados',
+            data: monthlySent,
+            backgroundColor:'rgba(37,63,133,.86)',
+            borderColor:'#253F85',
+            borderWidth:1,
+            borderRadius:12,
+            maxBarThickness:54,
+            yAxisID:'y'
+          },
+          {
+            label:'Taxa média de abertura',
+            data: monthlyOpen,
+            type:'line',
+            borderColor:'#00A6DF',
+            backgroundColor:'#00A6DF',
+            tension:.38,
+            pointRadius:5,
+            pointHoverRadius:7,
+            borderWidth:3,
+            yAxisID:'y1'
+          },
+          {
+            label:'Taxa média de clique (CTR)',
+            data: monthlyCtr,
+            type:'line',
+            borderColor:'#F9BD00',
+            backgroundColor:'#F9BD00',
+            tension:.38,
+            pointRadius:5,
+            pointHoverRadius:7,
+            borderWidth:3,
+            yAxisID:'y1'
+          }
         ]
       }, {
         responsive:true,
         maintainAspectRatio:false,
         interaction:{ mode:'index', intersect:false },
-        plugins:{ legend:{ position:'bottom' } },
+        plugins:{
+          legend:{ position:'bottom', labels:{ usePointStyle:true, boxWidth:10 } },
+          tooltip:{
+            backgroundColor:'rgba(13,21,48,.94)',
+            padding:12,
+            callbacks:{
+              label:function(context){
+                if (context.dataset.yAxisID === 'y') return `${context.dataset.label}: ${formatInt(context.raw)}`;
+                return `${context.dataset.label}: ${formatPct(context.raw)}`;
+              }
+            }
+          }
+        },
         scales:{
-          y: { beginAtZero:true, ticks:{ color:getCss('--muted') }, grid:{ color:gridColor() } },
-          y1: { beginAtZero:true, position:'right', ticks:{ callback:v => v + '%', color:getCss('--muted') }, grid:{ drawOnChartArea:false } },
+          y: {
+            beginAtZero:true,
+            position:'left',
+            title:{ display:true, text:'Volume enviado', color:getCss('--muted'), font:{ weight:'700' } },
+            ticks:{ color:getCss('--muted'), callback:v => formatInt(v) },
+            grid:{ color:gridColor() }
+          },
+          y1: {
+            beginAtZero:true,
+            position:'right',
+            title:{ display:true, text:'Taxas (%)', color:getCss('--muted'), font:{ weight:'700' } },
+            ticks:{ callback:v => v + '%', color:getCss('--muted') },
+            grid:{ drawOnChartArea:false }
+          },
           x: { ticks:{ color:getCss('--muted') }, grid:{ display:false } }
         }
       });
@@ -872,29 +1227,6 @@
         plugins:{ legend:{ position:'bottom' } }
       });
 
-      const distribution = {
-        'CTR = 0': data.filter(item => item.ctr === 0).length,
-        'CTR baixa': data.filter(item => item.ctr > 0 && item.ctr <= 2).length,
-        'CTR média': data.filter(item => item.ctr > 2 && item.ctr <= 5).length,
-        'CTR alta': data.filter(item => item.ctr > 5).length,
-      };
-      upsertChart('distributionChart', 'doughnut', {
-        labels:Object.keys(distribution),
-        datasets:[{ data:Object.values(distribution), backgroundColor:['#DC2626','#F59E0B','#5B8DEF','#00A6DF'], borderWidth:0 }]
-      }, {
-        responsive:true,
-        maintainAspectRatio:false,
-        plugins:{ legend:{ position:'bottom' } }
-      });
-
-      const delivery = average(data.map(item => item.deliveryRate));
-      const zeroCtr = distribution['CTR = 0'];
-      const bestType = getTopCampaignType(data);
-      document.getElementById('overviewCallout').innerHTML = `
-        <h3>Leitura executiva da visão geral</h3>
-        <p>Com <strong>${formatInt(data.length)}</strong> disparos na base filtrada, a operação mantém <strong>${formatPct(delivery)}</strong> de entrega média, o que indica boa eficiência de envio. O principal ponto de atenção está na conversão para clique: a base tem <strong>${formatPct(avgCtr)}</strong> de CTR médio e <strong>${formatInt(zeroCtr)}</strong> e-mails com CTR zerado.</p>
-        <p>Quando há intenção de clique, o tipo de campanha com melhor resultado é <strong>${bestType.type}</strong>, com <strong>${formatPct(bestType.ctr)}</strong> de CTR médio. Isso sugere reforçar formatos com proposta mais clara de valor e CTA mais visível.</p>
-      `;
     }
 
     function renderOverviewTable(data) {
@@ -958,13 +1290,44 @@
           const bg = value === null
             ? getCss('--card-2')
             : `linear-gradient(180deg, rgba(0,166,223,${(intensity * .85).toFixed(2)}), rgba(37,63,133,${(intensity * .95).toFixed(2)}))`;
-          html += `<div class="cell" style="background:${bg}; color:${value !== null && intensity > 0.55 ? '#fff' : getCss('--text')};">
+          const metricLabel = metricKey === 'openRate' ? 'Taxa média de abertura' : 'Taxa média de clique (CTR)';
+          const tooltip = value === null
+            ? `${day} às ${String(hour).padStart(2,'0')}h\nSem disparos registrados neste período.`
+            : `${day} às ${String(hour).padStart(2,'0')}h\n${metricLabel}: ${formatPct(value)}\nVolume: ${count} disparo(s)\nLeitura: ${value >= 10 ? 'resultado acima da média para este mapa.' : value > 0 ? 'houve engajamento, mas pode melhorar.' : 'não houve clique/ação registrada.'}`;
+          html += `<div class="cell" data-tooltip="${escapeAttr(tooltip)}" title="${escapeAttr(tooltip)}" style="background:${bg}; color:${value !== null && intensity > 0.55 ? '#fff' : getCss('--text')};">
               <span class="metric">${value === null ? '—' : formatPct(value)}</span>
               <span class="sub">${count ? count + ' disparo(s)' : ''}</span>
             </div>`;
         });
       });
       container.innerHTML = html;
+    }
+
+    function populateScheduleTableFilters(scheduleSummary) {
+      const daySelect = document.getElementById('scheduleDayFilter');
+      const hourSelect = document.getElementById('scheduleHourFilter');
+      if (!daySelect || !hourSelect) return;
+
+      const selectedDay = daySelect.value;
+      const selectedHour = hourSelect.value;
+
+      const days = dayOrder.filter(day => scheduleSummary.some(item => item.day === day));
+      const hours = Array.from(new Set(scheduleSummary.map(item => item.hour))).sort((a,b) => a - b);
+
+      daySelect.innerHTML = '<option value="">Todos os dias</option>' + days.map(day => `<option value="${day}">${day}</option>`).join('');
+      hourSelect.innerHTML = '<option value="">Todos os horários</option>' + hours.map(hour => `<option value="${hour}">${String(hour).padStart(2,'0')}h</option>`).join('');
+
+      daySelect.value = days.includes(selectedDay) ? selectedDay : '';
+      hourSelect.value = hours.map(String).includes(String(selectedHour)) ? selectedHour : '';
+    }
+
+    function getScheduleTableFilters() {
+      const day = document.getElementById('scheduleDayFilter')?.value || '';
+      const hourValue = document.getElementById('scheduleHourFilter')?.value || '';
+      return {
+        day,
+        hour: hourValue === '' ? '' : Number(hourValue)
+      };
     }
 
     function renderScheduleCharts(data) {
@@ -1043,6 +1406,14 @@
         })
         .sort((a,b) => a.day.localeCompare(b.day) || a.hour - b.hour);
 
+      populateScheduleTableFilters(scheduleSummary);
+      const scheduleFilters = getScheduleTableFilters();
+      const filteredSummary = scheduleSummary.filter(item => {
+        const matchesDay = !scheduleFilters.day || item.day === scheduleFilters.day;
+        const matchesHour = scheduleFilters.hour === '' || item.hour === scheduleFilters.hour;
+        return matchesDay && matchesHour;
+      });
+
       const table = document.getElementById('scheduleTable');
       table.querySelector('thead').innerHTML = `<tr>
         <th>Dia da semana</th>
@@ -1051,15 +1422,17 @@
         <th>Média de CTR</th>
         <th>Quantidade de disparos</th>
       </tr>`;
-      table.querySelector('tbody').innerHTML = scheduleSummary.map(item => `
-        <tr>
-          <td>${item.day}</td>
-          <td>${String(item.hour).padStart(2,'0')}h</td>
-          <td class="table-kpi">${formatPct(item.open)}</td>
-          <td class="table-kpi">${formatPct(item.ctr)}</td>
-          <td>${formatInt(item.count)}</td>
-        </tr>
-      `).join('');
+      table.querySelector('tbody').innerHTML = filteredSummary.length
+        ? filteredSummary.map(item => `
+          <tr>
+            <td>${item.day}</td>
+            <td>${String(item.hour).padStart(2,'0')}h</td>
+            <td class="table-kpi">${formatPct(item.open)}</td>
+            <td class="table-kpi">${formatPct(item.ctr)}</td>
+            <td>${formatInt(item.count)}</td>
+          </tr>
+        `).join('')
+        : `<tr><td colspan="5">Nenhum registro encontrado para os filtros selecionados.</td></tr>`;
     }
 
     function getTopCampaignType(data) {
@@ -1120,49 +1493,79 @@
         indexAxis:'y',
         responsive:true,
         maintainAspectRatio:false,
-        plugins:{ legend:{ display:false } },
+        plugins:{
+          legend:{ display:false },
+          tooltip:{
+            callbacks:{
+              label:function(context){
+                if (mode === 'clicks') return `Cliques únicos: ${formatInt(context.raw)}`;
+                return `${context.dataset.label}: ${formatPct(context.raw)}`;
+              }
+            }
+          }
+        },
         scales: {
           x: { beginAtZero:true, ticks:{ color:getCss('--muted') }, grid:{ color:gridColor() } },
           y: { ticks:{ color:getCss('--muted') }, grid:{ display:false } }
         }
       });
 
-      const scatterData = ranked.map(item => ({
-        x:item.openRate,
-        y:item.ctr,
-        subject:item.subject,
-        campaignType:item.campaignType,
-        clicks:item.clicks
-      }));
-      upsertChart('scatterChart', 'scatter', {
-        datasets:[{
-          label:'Campanhas',
-          data: scatterData,
-          backgroundColor: scatterData.map(item => typeColor(item.campaignType)),
-          pointRadius: scatterData.map(item => Math.max(5, Math.min(12, item.clicks / 2))),
-          pointHoverRadius: scatterData.map(item => Math.max(6, Math.min(14, item.clicks / 2 + 1)))
-        }]
-      }, {
-        responsive:true, maintainAspectRatio:false,
-        plugins:{
-          legend:{ display:false },
-          tooltip:{
-            callbacks:{
-              label: (ctx) => {
-                const raw = ctx.raw;
-                return `${raw.subject} | Abertura: ${formatPct(raw.x)} | CTR: ${formatPct(raw.y)} | Tipo: ${raw.campaignType}`;
-              }
-            }
-          }
-        },
-        scales: {
-          x: { title:{ display:true, text:'Taxa de abertura (%)' }, ticks:{ color:getCss('--muted') }, grid:{ color:gridColor() } },
-          y: { title:{ display:true, text:'CTR (%)' }, ticks:{ color:getCss('--muted') }, grid:{ color:gridColor() } }
-        }
+      renderLowOpenRanking(ranked);
+      renderRankingTable(ranked);
+    }
+
+    function renderLowOpenRanking(data) {
+      const container = document.getElementById('lowOpenRanking');
+      const lowest = [...data].sort((a,b) => a.openRate - b.openRate).slice(0, 10);
+      container.innerHTML = lowest.map((item, index) => `
+        <div class="ranking-item" title="${item.subject}">
+          <div class="ranking-position">${index + 1}</div>
+          <div>
+            <div class="ranking-subject">${truncate(item.subject, 62)}</div>
+            <div class="ranking-meta">${item.campaignType} · ${item.dateLabel} · ${item.time} · CTR ${formatPct(item.ctr)}</div>
+          </div>
+          <div class="ranking-value">${formatPct(item.openRate)}</div>
+        </div>
+      `).join('');
+    }
+
+    function getRankingTableFilters() {
+      return {
+        search: document.getElementById('rankingTableSearch')?.value.trim().toLowerCase() || '',
+        type: document.getElementById('rankingTableType')?.value || '',
+        openFilter: document.getElementById('rankingOpenFilter')?.value || '',
+        engagementFilter: document.getElementById('rankingEngagementFilter')?.value || '',
+        sortMode: document.getElementById('rankingSortMode')?.value || 'openAsc'
+      };
+    }
+
+    function renderRankingTable(data) {
+      const avgOpen = average(data.map(item => item.openRate));
+      const avgCtr = average(data.map(item => item.ctr));
+      const filters = getRankingTableFilters();
+      let tableData = [...data].filter(item => {
+        const matchesSearch = !filters.search || item.subject.toLowerCase().includes(filters.search);
+        const matchesType = !filters.type || item.campaignType === filters.type;
+        let matchesOpen = true;
+        if (filters.openFilter === 'low25') matchesOpen = item.openRate < 25;
+        if (filters.openFilter === 'belowAvg') matchesOpen = item.openRate < avgOpen;
+        if (filters.openFilter === 'highOpenLowClick') matchesOpen = item.openRate >= avgOpen && item.ctr < avgCtr;
+        let matchesEngagement = true;
+        if (filters.engagementFilter === 'zeroCtr') matchesEngagement = item.ctr === 0;
+        if (filters.engagementFilter === 'lowCtr') matchesEngagement = item.ctr > 0 && item.ctr < 2;
+        if (filters.engagementFilter === 'zeroClicks') matchesEngagement = item.clicks === 0;
+        return matchesSearch && matchesType && matchesOpen && matchesEngagement;
       });
 
-      const avgOpen = average(ranked.map(item => item.openRate));
-      const avgCtr = average(ranked.map(item => item.ctr));
+      const sorters = {
+        openAsc: (a,b) => a.openRate - b.openRate,
+        openDesc: (a,b) => b.openRate - a.openRate,
+        ctrAsc: (a,b) => a.ctr - b.ctr,
+        ctrDesc: (a,b) => b.ctr - a.ctr,
+        clicksDesc: (a,b) => b.clicks - a.clicks
+      };
+      tableData.sort(sorters[filters.sortMode] || sorters.openAsc);
+
       const table = document.getElementById('rankingTable');
       table.querySelector('thead').innerHTML = `<tr>
         <th>Assunto do e-mail</th>
@@ -1170,18 +1573,28 @@
         <th>Abertura</th>
         <th>CTR</th>
         <th>Cliques</th>
+        <th>Diagnóstico</th>
         <th>Comparação com a média geral</th>
       </tr>`;
-      table.querySelector('tbody').innerHTML = topTen.map(item => `
+      table.querySelector('tbody').innerHTML = tableData.map(item => `
         <tr>
           <td>${item.subject}</td>
           <td><span class="badge">${item.campaignType}</span></td>
           <td class="table-kpi">${formatPct(item.openRate)}</td>
           <td class="table-kpi">${formatPct(item.ctr)}</td>
           <td>${formatInt(item.clicks)}</td>
+          <td>${diagnosisText(item, avgOpen, avgCtr)}</td>
           <td>${comparisonText(item, avgOpen, avgCtr)}</td>
         </tr>
-      `).join('');
+      `).join('') || `<tr><td colspan="7">Nenhum disparo encontrado para os filtros selecionados.</td></tr>`;
+    }
+
+    function diagnosisText(item, avgOpen, avgCtr) {
+      if (item.openRate < avgOpen && item.ctr === 0) return '<span class="badge bad">Baixa abertura e sem clique</span>';
+      if (item.openRate < avgOpen) return '<span class="badge warn">Abertura abaixo da média</span>';
+      if (item.openRate >= avgOpen && item.ctr < avgCtr) return '<span class="badge warn">Boa abertura, baixo clique</span>';
+      if (item.openRate >= avgOpen && item.ctr >= avgCtr) return '<span class="badge good">Acima da média</span>';
+      return '<span class="badge">Neutro</span>';
     }
 
     function comparisonText(item, avgOpen, avgCtr) {
@@ -1306,9 +1719,15 @@
       document.getElementById(id).addEventListener('input', renderAll);
       document.getElementById(id).addEventListener('change', renderAll);
     });
-    ['rankingMode','rankingSearch','rankingType'].forEach(id => {
-      document.getElementById(id).addEventListener('input', renderRanking);
-      document.getElementById(id).addEventListener('change', renderRanking);
+    ['rankingMode','rankingSearch','rankingType','rankingTableSearch','rankingTableType','rankingOpenFilter','rankingEngagementFilter','rankingSortMode'].forEach(id => {
+      const element = document.getElementById(id);
+      if (element) {
+        element.addEventListener('input', renderRanking);
+        element.addEventListener('change', renderRanking);
+      }
+    });
+    ['scheduleDayFilter','scheduleHourFilter'].forEach(id => {
+      document.getElementById(id).addEventListener('change', () => renderScheduleCharts(applyFilters(rawData)));
     });
 
     document.getElementById('columnsBtn').addEventListener('click', (event) => {
@@ -1343,9 +1762,42 @@
         document.getElementById('helpModal').classList.remove('open');
       }
     });
-
     buildColumnSelector();
     renderAll();
+  
+    function unlockInsights() {
+      const input = document.getElementById('insightsPassword');
+      const error = document.getElementById('insightsError');
+      const lock = document.getElementById('insightsLock');
+      const content = document.getElementById('insightsContent');
+
+      if (!input || !error || !lock || !content) return;
+
+      if (input.value === '123@Medportal') {
+        lock.style.display = 'none';
+        content.classList.remove('locked');
+        error.classList.remove('active');
+      } else {
+        error.classList.add('active');
+        input.focus();
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const insightsButton = document.getElementById('insightsUnlockBtn');
+      const insightsInput = document.getElementById('insightsPassword');
+
+      if (insightsButton) {
+        insightsButton.addEventListener('click', unlockInsights);
+      }
+
+      if (insightsInput) {
+        insightsInput.addEventListener('keydown', (event) => {
+          if (event.key === 'Enter') unlockInsights();
+        });
+      }
+    });
+
   </script>
 </body>
 </html>
