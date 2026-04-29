@@ -1,373 +1,134 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<title>Medportal | Disparos RD</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<!-- Fonte -->
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap">
-
-<!-- Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<style>
-:root{
-  --primary:#1E2D5C;
-  --secondary:#253F85;
-  --accent:#00A6DF;
-  --highlight:#F9BD00;
-  --bg:#ECF0F8;
-  --card:#ffffff;
-  --text:#383839;
-  --muted:#7B7D81;
-}
-
-*{box-sizing:border-box;font-family:'Roboto',sans-serif;}
-body{margin:0;background:var(--bg);color:var(--text);}
-
-.sidebar{
-  position:fixed;left:0;top:0;bottom:0;width:260px;
-  background:var(--primary);color:#fff;
-  padding:24px;display:flex;flex-direction:column;
-}
-.logo{text-align:center;margin-bottom:32px;}
-.logo img{max-width:180px;}
-
-.nav a{
-  display:block;color:#fff;text-decoration:none;
-  padding:12px 14px;border-radius:8px;
-  margin-bottom:6px;
-}
-.nav a.active,.nav a:hover{background:rgba(255,255,255,.15);}
-
-.theme-toggle{
-  margin-top:auto;
-  border:none;border-radius:8px;
-  background:rgba(255,255,255,.15);
-  color:#fff;padding:10px;
-  cursor:pointer;font-size:18px;
-}
-
-.main{margin-left:260px;padding:32px;}
-.section{display:none;}
-.section.active{display:block;}
-
-h1{
-  font-size:22px;
-  margin:0 0 16px 0;
-  display:flex;
-  align-items:center;
-  gap:8px;
-}
-
-.help{
-  background:var(--accent);
-  color:#fff;
-  width:18px;height:18px;
-  border-radius:50%;
-  font-size:12px;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  cursor:pointer;
-}
-
-.kpis{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:16px;
-  margin-bottom:28px;
-}
-.card{
-  background:var(--card);
-  border-radius:12px;
-  padding:18px 20px;
-  box-shadow:0 4px 12px rgba(0,0,0,.06);
-}
-.card span{
-  font-size:12px;
-  color:var(--muted);
-}
-.card h2{
-  margin:6px 0 0 0;
-  font-size:24px;
-  color:var(--secondary);
-  font-weight:600;
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(420px,1fr));
-  gap:24px;
-}
-
-.chart-card{
-  background:var(--card);
-  border-radius:12px;
-  padding:20px 22px;
-  box-shadow:0 4px 12px rgba(0,0,0,.06);
-}
-
-.chart-card h3{
-  margin:0 0 12px 0;
-  font-size:14px;
-  color:var(--secondary);
-  font-weight:500;
-}
-
-.executive{
-  margin-top:24px;
-  padding:20px 24px;
-  background:var(--card);
-  border-radius:12px;
-  box-shadow:0 4px 12px rgba(0,0,0,.06);
-}
-.executive p{
-  margin:6px 0;
-  line-height:1.5;
-}
-.executive b{color:var(--secondary);}
-
-.filters{
-  display:flex;
-  gap:12px;
-  margin-bottom:12px;
-}
-.filters select{
-  padding:8px 10px;
-  border-radius:8px;
-  border:1px solid #ddd;
-}
-
-.table-wrap{
-  margin-top:16px;
-  overflow:auto;
-  max-height:420px;
-}
-table{
-  width:100%;
-  border-collapse:collapse;
-  font-size:13px;
-}
-thead th{
-  position:sticky;
-  top:0;
-  background:#f4f6fb;
-  text-align:left;
-  padding:10px;
-  font-weight:500;
-}
-tbody td{
-  padding:10px;
-  border-bottom:1px solid #eee;
-}
-tbody tr:nth-child(even){background:#fafbff;}
-td.num{text-align:center;}
-.badge{
-  padding:4px 8px;
-  border-radius:8px;
-  font-size:11px;
-  background:rgba(0,166,223,.12);
-  color:#005f80;
-}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Medportal | Dashboard de Disparos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root{
+      --primary:#1E2D5C; --secondary:#253F85; --accent:#00A6DF; --highlight:#F9BD00;
+      --bg:#ECF0F8; --bg2:#DDEBFA; --card:#FFFFFF; --text:#0B1F3F; --muted:#667391;
+      --line:#D7DEEC; --soft:#F5F7FB; --danger:#E63946; --success:#13A66B; --shadow:0 14px 34px rgba(30,45,92,.10);
+    }
+    [data-theme="dark"]{--bg:#0E1429;--bg2:#14224A;--card:#17254A;--text:#F4F7FB;--muted:#B8C4DD;--line:#2B3A68;--soft:#111D3A;--shadow:0 16px 36px rgba(0,0,0,.28)}
+    *{box-sizing:border-box;font-family:'Roboto',Arial,sans-serif} body{margin:0;background:linear-gradient(135deg,var(--bg),var(--bg2));color:var(--text)}
+    .sidebar{position:fixed;left:0;top:0;bottom:0;width:260px;background:var(--primary);color:#fff;padding:24px;display:flex;flex-direction:column;z-index:10}
+    .logo{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.08);border-radius:20px;padding:24px 12px;margin-bottom:34px;text-align:center;font-weight:900;font-size:28px;letter-spacing:-1px}.logo small{color:var(--highlight)}
+    .nav a{display:block;color:#fff;text-decoration:none;padding:14px 16px;border-radius:12px;margin-bottom:10px;font-weight:700;transition:.2s}.nav a.active,.nav a:hover{background:#fff;color:#071B49}
+    .sidebar-footer{margin-top:auto;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.08);border-radius:14px;padding:14px;display:flex;align-items:center;justify-content:space-between}.theme-toggle{border:0;border-radius:10px;background:#fff;padding:9px 18px;cursor:pointer;font-size:16px}
+    .main{margin-left:260px;padding:30px 34px 60px}.section{display:none}.section.active{display:block}.page-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:22px}.page-head h1{margin:0;font-size:32px;color:var(--text)}.page-head p{margin:8px 0 0;color:var(--muted);font-size:15px;max-width:980px;line-height:1.45}.help{width:38px;height:38px;border:0;border-radius:12px;background:var(--card);box-shadow:var(--shadow);font-weight:900;color:var(--primary)}
+    .filterbar{background:rgba(255,255,255,.75);border:1px solid rgba(255,255,255,.7);border-radius:20px;padding:16px;margin-bottom:24px;box-shadow:var(--shadow);display:grid;grid-template-columns:1.2fr 1fr .9fr .9fr auto;gap:14px}.field label{font-size:12px;color:var(--muted);font-weight:800;text-transform:uppercase;display:block;margin-bottom:7px}.field input,.field select{width:100%;border:1px solid var(--line);background:var(--soft);color:var(--text);border-radius:12px;padding:12px 14px;font-size:14px}.btn{border:0;background:var(--primary);color:white;border-radius:12px;padding:12px 18px;font-weight:800;cursor:pointer}.kpis{display:grid;grid-template-columns:repeat(7,minmax(130px,1fr));gap:14px;margin-bottom:24px}.card,.chart-card,.table-card,.insight-card{background:var(--card);border:1px solid rgba(255,255,255,.65);border-radius:20px;box-shadow:var(--shadow)}.card{padding:18px;min-height:128px}.card span{font-size:13px;color:var(--muted);font-weight:800}.card h2{font-size:31px;color:var(--secondary);margin:14px 0 8px}.card p{margin:0;color:var(--muted);font-size:13px;line-height:1.25}.grid{display:grid;grid-template-columns:1.35fr 1fr;gap:20px}.grid.single{grid-template-columns:1fr}.chart-card{padding:22px}.chart-card h3,.table-card h3{margin:0 0 6px;font-size:20px}.chart-card p,.table-card p{margin:0 0 16px;color:var(--muted);font-size:14px;line-height:1.35}.chart-box{height:340px}.chart-box.small{height:280px}.executive{padding:24px;background:linear-gradient(135deg,rgba(0,166,223,.15),rgba(249,189,0,.13));line-height:1.45;font-size:16px}.executive h3{margin:0 0 12px;font-size:22px}.table-card{padding:22px;margin-top:22px}.table-actions{display:flex;gap:12px;align-items:end;margin:14px 0 16px}.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:16px;max-height:560px}table{width:100%;border-collapse:separate;border-spacing:0;font-size:13px;min-width:1050px}th{position:sticky;top:0;z-index:1;background:var(--soft);color:var(--muted);text-transform:uppercase;letter-spacing:.04em;text-align:left;font-size:12px;padding:14px}td{padding:14px;border-top:1px solid var(--line);vertical-align:top}tbody tr:nth-child(even){background:rgba(0,166,223,.035)}tbody tr:hover{background:rgba(0,166,223,.08)}.num{text-align:center;font-weight:800}.badge{display:inline-block;padding:6px 10px;border-radius:999px;background:#DDF5FF;color:#0088BD;font-weight:900}.tag-pos{background:#E8F7EF;color:#0B8453}.tag-neg{background:#FDECEE;color:#C32633}.muted{color:var(--muted)}
+    .hours-stack{display:grid;grid-template-columns:1fr;gap:20px}.mini-kpis{display:grid;grid-template-columns:repeat(4,minmax(170px,1fr));gap:14px;margin-bottom:20px}.ranking-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.rank-controls{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}.insights-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}.insight-card{padding:20px}.insight-card h3{margin:0 0 8px;color:var(--secondary)}
+    @media(max-width:1180px){.kpis{grid-template-columns:repeat(3,1fr)}.grid,.ranking-grid{grid-template-columns:1fr}.filterbar{grid-template-columns:1fr 1fr}.main{padding:22px}.sidebar{width:220px}.main{margin-left:220px}}
+    @media(max-width:760px){.sidebar{position:relative;width:100%;height:auto}.main{margin-left:0}.kpis,.mini-kpis,.filterbar,.rank-controls{grid-template-columns:1fr}.page-head h1{font-size:25px}}
+  </style>
 </head>
-
 <body>
+  <aside class="sidebar">
+    <div class="logo">medportal<small>▻</small></div>
+    <nav class="nav">
+      <a href="#" class="active" onclick="showSection(event,'visao')">Visão Geral</a>
+      <a href="#" onclick="showSection(event,'horarios')">Horários e Dias</a>
+      <a href="#" onclick="showSection(event,'ranking')">Ranking</a>
+      <a href="#" onclick="showSection(event,'insights')">Insights</a>
+    </nav>
+    <div class="sidebar-footer"><div><b>Dashboard online</b><br><span>Dados de disparos</span></div><button class="theme-toggle" onclick="toggleTheme()">🌙 ☀️</button></div>
+  </aside>
 
-<div class="sidebar">
-  <div class="logo">
-    <img src="logo-play-azulclaro(3).png" alt="Medportal">
-  </div>
-  <div class="nav">
-    <a href="#" class="active" onclick="showSection(event,'visao')">Visão Geral</a>
-    <a href="#" onclick="showSection(event,'horarios')">Horários e Dias</a>
-    <a href="#" onclick="showSection(event,'ranking')">Ranking</a>
-    <a href="#" onclick="showSection(event,'insights')">Insights</a>
-  </div>
-  <button class="theme-toggle">🌙 ☀️</button>
-</div>
+  <main class="main">
+    <section id="visao" class="section active">
+      <div class="page-head"><div><h1>Dashboard</h1><p>Visão consolidada dos disparos, com foco em volume, entrega, abertura, clique e consulta detalhada da base.</p></div><button class="help" title="Filtros e indicadores atualizam a página">?</button></div>
+      <div class="filterbar">
+        <div class="field"><label>Buscar por assunto</label><input id="fAssunto" placeholder="Digite parte do assunto" oninput="renderAll()"></div>
+        <div class="field"><label>Tipo de campanha</label><select id="fTipo" onchange="renderAll()"></select></div>
+        <div class="field"><label>Data inicial</label><input type="date" id="fInicio" onchange="renderAll()"></div>
+        <div class="field"><label>Data final</label><input type="date" id="fFim" onchange="renderAll()"></div>
+        <button class="btn" onclick="resetFilters()">Limpar filtros</button>
+      </div>
+      <div class="kpis" id="kpisVisao"></div>
+      <div class="grid">
+        <div class="chart-card"><h3>Evolução mensal</h3><p>E-mails enviados, taxa média de abertura e CTR por mês.</p><div class="chart-box"><canvas id="evolucaoMensal"></canvas></div></div>
+        <div class="chart-card"><h3>Comparação geral</h3><p>Comparação simples entre abertura média e clique médio.</p><div class="chart-box small"><canvas id="comparacaoMedias"></canvas></div></div>
+        <div class="chart-card"><h3>Distribuição de CTR</h3><p>Classificação dos e-mails por nível de CTR.</p><div class="chart-box small"><canvas id="distribuicaoCTR"></canvas></div></div>
+        <div class="executive insight-card" id="leituraExecutiva"></div>
+      </div>
+      <div class="table-card"><h3>Base detalhada de disparos</h3><p>Consulta completa com dados de data, horário, campanha e principais métricas.</p><div class="table-wrap"><table id="tabelaDados"></table></div></div>
+    </section>
 
-<div class="main">
+    <section id="horarios" class="section">
+      <div class="page-head"><div><h1>Dashboard</h1><p>Entendimento do melhor momento para disparar, cruzando dia da semana e horário.</p></div><button class="help" title="Análise por dia e horário">?</button></div>
+      <div class="mini-kpis" id="kpisHorarios"></div>
+      <div class="hours-stack">
+        <div class="chart-card"><h3>Taxa de abertura por dia e horário</h3><p>Visual limpo para identificar janelas com maior abertura.</p><div class="chart-box"><canvas id="aberturaDiaHora"></canvas></div></div>
+        <div class="chart-card"><h3>Taxa de clique por dia e horário</h3><p>Visual limpo para identificar janelas com maior clique.</p><div class="chart-box"><canvas id="ctrDiaHora"></canvas></div></div>
+      </div>
+      <div class="table-card"><h3>Tabela de apoio</h3><p>Resumo por dia e horário com filtros próprios.</p><div class="table-actions"><div class="field"><label>Dia da semana</label><select id="fDiaApoio" onchange="renderTabelaApoio()"></select></div><div class="field"><label>Horário</label><select id="fHoraApoio" onchange="renderTabelaApoio()"></select></div></div><div class="table-wrap"><table id="tabelaApoio"></table></div></div>
+    </section>
 
-<section id="visao" class="section active">
-  <h1>Dashboard – Visão Geral <span class="help" title="Resumo executivo de performance dos disparos">?</span></h1>
+    <section id="ranking" class="section">
+      <div class="page-head"><div><h1>Dashboard</h1><p>Identificação dos melhores e piores e-mails por abertura, CTR e cliques.</p></div><button class="help" title="Ranking de performance">?</button></div>
+      <div class="filterbar rank-controls">
+        <div class="field"><label>Ranking principal</label><select id="rankMode" onchange="renderRanking()"><option value="topAbertura">Top 10 abertura</option><option value="topCTR">Top 10 CTR</option><option value="bottomAbertura">Piores abertura</option><option value="bottomCTR">Piores CTR</option></select></div>
+        <div class="field"><label>Buscar por assunto</label><input id="rankBusca" placeholder="Filtrar ranking" oninput="renderRanking()"></div>
+        <div class="field"><label>Tipo de campanha</label><select id="rankTipo" onchange="renderRanking()"></select></div>
+      </div>
+      <div class="ranking-grid">
+        <div class="chart-card"><h3>Ranking em barras</h3><p>Comparação objetiva conforme filtro selecionado.</p><div class="chart-box"><canvas id="rankingBar"></canvas></div></div>
+        <div class="chart-card"><h3>Melhores x piores e-mails</h3><p>Comparação direta para priorizar ações.</p><div class="chart-box"><canvas id="rankingComparativo"></canvas></div></div>
+      </div>
+      <div class="table-card"><h3>Tabela comparativa</h3><p>Lista de e-mails conforme seleção de melhores ou piores.</p><div class="table-wrap"><table id="tabelaRanking"></table></div></div>
+    </section>
 
-  <div class="kpis" id="kpis"></div>
-
-  <div class="grid">
-    <div class="chart-card">
-      <h3>Evolução mensal</h3>
-      <canvas id="evolucao"></canvas>
-    </div>
-    <div class="chart-card">
-      <h3>Médias gerais</h3>
-      <canvas id="comparacao"></canvas>
-    </div>
-    <div class="chart-card">
-      <h3>Distribuição de CTR</h3>
-      <canvas id="distribuicao"></canvas>
-    </div>
-  </div>
-
-  <div class="executive" id="leituraExecutiva"></div>
-
-  <div class="chart-card" style="margin-top:24px">
-    <h3>Detalhamento dos disparos</h3>
-
-    <div class="filters">
-      <select id="filtroCampanha" multiple></select>
-    </div>
-
-    <div class="table-wrap">
-      <table id="tabela"></table>
-    </div>
-  </div>
-</section>
-
-</div>
+    <section id="insights" class="section">
+      <div class="page-head"><div><h1>Dashboard</h1><p>Leitura automática dos principais padrões encontrados nos disparos.</p></div><button class="help" title="Insights automáticos">?</button></div>
+      <div class="insights-list" id="insightsTexto"></div>
+    </section>
+  </main>
 
 <script>
-/* ================= DADOS ================= */
+/* =========================
+   DADOS — substitua/cole aqui a base gerada pela planilha.
+   A coluna nova esperada é: tipoCampanha.
+========================= */
 const dados = [
-  {assunto:'Webinar Exclusivo',data:'26/02/2026',dia:'Quinta',hora:'12:55',tipo:'Webinar',leads:121,entregues:120,aberturas:59,cliques:39,taxaEntrega:99.17,taxaAbertura:49.17,ctr:32.5},
-  {assunto:'Atualização Institucional',data:'12/01/2026',dia:'Segunda',hora:'10:00',tipo:'Institucional',leads:684,entregues:659,aberturas:160,cliques:0,taxaEntrega:96.35,taxaAbertura:24.28,ctr:0},
-  {assunto:'Webinar – É amanhã',data:'25/02/2026',dia:'Quarta',hora:'15:58',tipo:'Webinar',leads:116,entregues:113,aberturas:61,cliques:15,taxaEntrega:97.41,taxaAbertura:53.98,ctr:13.27}
+  {assunto:'Webinar Exclusivo Medportal | É amanhã', data:'25/02/2026', hora:'15:58', dia:'Quarta-feira', tipoCampanha:'Webinar', leads:116, entregues:113, aberturas:61, cliques:15, taxaEntrega:97.41, taxaAbertura:53.98, ctr:13.27},
+  {assunto:'Webinar Exclusivo Medportal já vai começar!', data:'26/02/2026', hora:'12:55', dia:'Quinta-feira', tipoCampanha:'Webinar', leads:121, entregues:120, aberturas:59, cliques:39, taxaEntrega:99.17, taxaAbertura:49.17, ctr:32.50},
+  {assunto:'Webinar Exclusivo Medportal já começou!', data:'26/02/2026', hora:'14:00', dia:'Quinta-feira', tipoCampanha:'Webinar', leads:115, entregues:113, aberturas:48, cliques:2, taxaEntrega:98.26, taxaAbertura:42.74, ctr:1.61},
+  {assunto:'Webinar Exclusivo | Sua opinião é muito importante', data:'27/02/2026', hora:'11:00', dia:'Sexta-feira', tipoCampanha:'Webinar', leads:110, entregues:108, aberturas:42, cliques:13, taxaEntrega:98.18, taxaAbertura:38.71, ctr:10.48},
+  {assunto:'Boas Práticas na Segmentação de Alunos na Plataforma', data:'12/03/2026', hora:'10:00', dia:'Quinta-feira', tipoCampanha:'Informativo', leads:265, entregues:259, aberturas:99, cliques:6, taxaEntrega:97.74, taxaAbertura:38.46, ctr:2.31},
+  {assunto:'Revisão Mensal de Educação Digital', data:'18/03/2026', hora:'16:00', dia:'Quarta-feira', tipoCampanha:'Informativo', leads:300, entregues:296, aberturas:110, cliques:27, taxaEntrega:98.67, taxaAbertura:37.31, ctr:10.38},
+  {assunto:'Uma nova experiência está chegando no Medportal', data:'09/04/2026', hora:'15:01', dia:'Quinta-feira', tipoCampanha:'Informativo', leads:98, entregues:95, aberturas:26, cliques:8, taxaEntrega:96.94, taxaAbertura:27.37, ctr:8.42},
+  {assunto:'Atualização Institucional Medportal', data:'12/01/2026', hora:'10:00', dia:'Segunda-feira', tipoCampanha:'Institucional', leads:684, entregues:659, aberturas:160, cliques:0, taxaEntrega:96.35, taxaAbertura:24.28, ctr:0},
+  {assunto:'Suporte Medportal | Avalie nosso atendimento', data:'08/04/2026', hora:'08:00', dia:'Quarta-feira', tipoCampanha:'Suporte', leads:210, entregues:208, aberturas:47, cliques:0, taxaEntrega:99.05, taxaAbertura:22.50, ctr:0},
+  {assunto:'Suporte Medportal com horário reduzido neste feriado', data:'17/04/2026', hora:'17:00', dia:'Sexta-feira', tipoCampanha:'Suporte', leads:180, entregues:178, aberturas:38, cliques:0, taxaEntrega:98.89, taxaAbertura:21.48, ctr:0}
 ];
 
-const media = arr => arr.reduce((a,b)=>a+b,0)/arr.length;
-const soma = arr => arr.reduce((a,b)=>a+b,0);
-
-/* ================= KPIs ================= */
-const kpis = [
-  ['E-mails disparados',dados.length],
-  ['Leads selecionados',soma(dados.map(d=>d.leads))],
-  ['Entregues',soma(dados.map(d=>d.entregues))],
-  ['Taxa média de entrega',media(dados.map(d=>d.taxaEntrega)).toFixed(1)+'%'],
-  ['Taxa média de abertura',media(dados.map(d=>d.taxaAbertura)).toFixed(1)+'%'],
-  ['CTR médio',media(dados.map(d=>d.ctr)).toFixed(1)+'%'],
-  ['Cliques únicos',soma(dados.map(d=>d.cliques))]
-];
-
-document.getElementById('kpis').innerHTML =
-  kpis.map(k=>`<div class="card"><span>${k[0]}</span><h2>${k[1]}</h2></div>`).join('');
-
-/* ================= GRÁFICOS ================= */
-new Chart(evolucao,{
-  type:'line',
-  data:{
-    labels:['Jan','Fev'],
-    datasets:[
-      {
-        label:'Envios',
-        data:[1,2],
-        borderColor:'#253F85',
-        backgroundColor:'rgba(37,63,133,.08)',
-        tension:.4,
-        fill:true
-      },
-      {
-        label:'Abertura média',
-        data:[24,51],
-        borderColor:'rgba(0,166,223,.5)',
-        tension:.4
-      }
-    ]
-  },
-  options:{
-    plugins:{legend:{display:false}},
-    scales:{
-      x:{grid:{display:false}},
-      y:{grid:{color:'rgba(0,0,0,.04)'}}
-    }
-  }
-});
-
-new Chart(comparacao,{
-  type:'doughnut',
-  data:{
-    labels:['Abertura','CTR'],
-    datasets:[{
-      data:[
-        media(dados.map(d=>d.taxaAbertura)),
-        media(dados.map(d=>d.ctr))
-      ],
-      backgroundColor:['#253F85','#00A6DF'],
-      borderWidth:0
-    }]
-  },
-  options:{
-    cutout:'65%',
-    plugins:{legend:{position:'bottom'}}
-  }
-});
-
-new Chart(distribuicao,{
-  type:'doughnut',
-  data:{
-    labels:['CTR 0','0–2%','2–5%','>5%'],
-    datasets:[{
-      data:[
-        dados.filter(d=>d.ctr===0).length,
-        dados.filter(d=>d.ctr>0&&d.ctr<=2).length,
-        dados.filter(d=>d.ctr>2&&d.ctr<=5).length,
-        dados.filter(d=>d.ctr>5).length
-      ],
-      backgroundColor:['#ccc','#253F85','#00A6DF','#F9BD00'],
-      borderWidth:0
-    }]
-  },
-  options:{
-    cutout:'65%',
-    plugins:{legend:{position:'bottom'}}
-  }
-});
-
-/* ================= LEITURA EXECUTIVA ================= */
-document.getElementById('leituraExecutiva').innerHTML = `
-<p><b>Performance geral sólida</b>, com taxa média de abertura de <b>${media(dados.map(d=>d.taxaAbertura)).toFixed(1)}%</b>.</p>
-<p>Campanhas de <b>Webinar</b> concentram os maiores CTRs, enquanto comunicações institucionais apresentam baixo clique.</p>
-<p>Oportunidade clara de otimização em <b>CTAs</b> e testes A/B para campanhas informativas.</p>
-`;
-
-/* ================= TABELA ================= */
-const tabela = document.getElementById('tabela');
-tabela.innerHTML = `
-<thead>
-<tr>
-  <th>Assunto</th>
-  <th>Data</th>
-  <th>Dia</th>
-  <th>Campanha</th>
-  <th class="num">Abertura %</th>
-  <th class="num">CTR %</th>
-  <th class="num">Cliques</th>
-</tr>
-</thead>
-<tbody>
-${dados.map(d=>`
-<tr>
-  <td title="${d.assunto}">${d.assunto}</td>
-  <td>${d.data}</td>
-  <td>${d.dia}</td>
-  <td><span class="badge">${d.tipo}</span></td>
-  <td class="num"><b>${d.taxaAbertura}</b></td>
-  <td class="num"><b>${d.ctr}</b></td>
-  <td class="num">${d.cliques}</td>
-</tr>
-`).join('')}
-</tbody>`;
-
-/* ================= NAVEGAÇÃO ================= */
-function showSection(e,id){
-  e.preventDefault();
-  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  document.querySelectorAll('.nav a').forEach(a=>a.classList.remove('active'));
-  e.target.classList.add('active');
-}
+let charts = {}; const fmtPct = n => `${(Number(n)||0).toFixed(2).replace('.',',')}%`; const soma = a => a.reduce((x,y)=>x+(Number(y)||0),0); const media = a => a.length ? soma(a)/a.length : 0; const uniq = a => [...new Set(a.filter(Boolean))];
+function parseDateBR(s){ const [d,m,y]=s.split('/'); return `${y}-${m}-${d}`; } function hourOnly(h){return (h||'').slice(0,2)+'h'}
+function destroy(id){ if(charts[id]) charts[id].destroy(); }
+function filtered(){ const assunto = document.getElementById('fAssunto')?.value?.toLowerCase()||''; const tipo = document.getElementById('fTipo')?.value||'Todos'; const ini = document.getElementById('fInicio')?.value; const fim = document.getElementById('fFim')?.value; return dados.filter(d=> (!assunto || d.assunto.toLowerCase().includes(assunto)) && (tipo==='Todos'||d.tipoCampanha===tipo) && (!ini||parseDateBR(d.data)>=ini) && (!fim||parseDateBR(d.data)<=fim)); }
+function chartDefaults(){ Chart.defaults.font.family='Roboto'; Chart.defaults.color=getComputedStyle(document.documentElement).getPropertyValue('--muted'); Chart.defaults.plugins.legend.labels.boxWidth=14; }
+function populateFilters(){ const tipos=uniq(dados.map(d=>d.tipoCampanha)); ['fTipo','rankTipo'].forEach(id=>{ const el=document.getElementById(id); if(el) el.innerHTML='<option>Todos</option>'+tipos.map(t=>`<option>${t}</option>`).join('');}); document.getElementById('fDiaApoio').innerHTML='<option>Todos</option>'+uniq(dados.map(d=>d.dia)).map(v=>`<option>${v}</option>`).join(''); document.getElementById('fHoraApoio').innerHTML='<option>Todos</option>'+uniq(dados.map(d=>hourOnly(d.hora))).sort().map(v=>`<option>${v}</option>`).join(''); }
+function renderKPIs(data){ const k=[['Total de e-mails disparados',data.length,'Volume na base filtrada'],['Total de leads selecionados',soma(data.map(d=>d.leads)).toLocaleString('pt-BR'),'Soma dos contatos'],['Total de e-mails entregues',soma(data.map(d=>d.entregues)).toLocaleString('pt-BR'),'Mensagens entregues'],['Taxa média de entrega',fmtPct(media(data.map(d=>d.taxaEntrega))),'Eficiência média'],['Taxa média de abertura',fmtPct(media(data.map(d=>d.taxaAbertura))),'Interesse inicial'],['Taxa média de clique (CTR)',fmtPct(media(data.map(d=>d.ctr))),'Capacidade de ação'],['Total de cliques únicos',soma(data.map(d=>d.cliques)).toLocaleString('pt-BR'),'Volume absoluto']]; document.getElementById('kpisVisao').innerHTML=k.map(x=>`<div class="card"><span>${x[0]}</span><h2>${x[1]}</h2><p>${x[2]}</p></div>`).join('');}
+function byMonth(data){ const map={}; data.forEach(d=>{const [,,y]=d.data.split('/'); const m=d.data.split('/')[1]; const label=`${m}/${y.slice(2)}`; map[label]=map[label]||[]; map[label].push(d);}); return Object.entries(map).map(([m,a])=>({m,enviados:a.length,ab:media(a.map(d=>d.taxaAbertura)),ctr:media(a.map(d=>d.ctr))}));}
+function renderVisaoCharts(data){ chartDefaults(); const primary='#253F85', accent='#00A6DF', yellow='#F9BD00'; const mensal=byMonth(data); destroy('evolucaoMensal'); charts.evolucaoMensal=new Chart(document.getElementById('evolucaoMensal'),{type:'bar',data:{labels:mensal.map(x=>x.m),datasets:[{label:'E-mails enviados',data:mensal.map(x=>x.enviados),backgroundColor:primary,borderRadius:8,yAxisID:'y'},{label:'Taxa de abertura',data:mensal.map(x=>x.ab),type:'line',borderColor:accent,backgroundColor:accent,tension:.35,yAxisID:'y1'},{label:'CTR',data:mensal.map(x=>x.ctr),type:'line',borderColor:yellow,backgroundColor:yellow,tension:.35,yAxisID:'y1'}]},options:{maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},scales:{y:{grid:{color:'rgba(102,115,145,.15)',drawBorder:false}},y1:{position:'right',grid:{display:false},ticks:{callback:v=>v+'%'}}}}}); destroy('comparacaoMedias'); charts.comparacaoMedias=new Chart(document.getElementById('comparacaoMedias'),{type:'bar',data:{labels:['Abertura média','CTR médio'],datasets:[{data:[media(data.map(d=>d.taxaAbertura)),media(data.map(d=>d.ctr))],backgroundColor:[primary,accent],borderRadius:10}]},options:{maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{ticks:{callback:v=>v+'%'},grid:{color:'rgba(102,115,145,.15)'}},y:{grid:{display:false}}}}}); destroy('distribuicaoCTR'); charts.distribuicaoCTR=new Chart(document.getElementById('distribuicaoCTR'),{type:'doughnut',data:{labels:['CTR = 0','CTR baixa','CTR média','CTR alta'],datasets:[{data:[data.filter(d=>d.ctr===0).length,data.filter(d=>d.ctr>0&&d.ctr<=2).length,data.filter(d=>d.ctr>2&&d.ctr<=5).length,data.filter(d=>d.ctr>5).length],backgroundColor:['#E63946','#F9BD00','#5B8DEF','#00A6DF'],borderWidth:0}]},options:{maintainAspectRatio:false,cutout:'66%',plugins:{legend:{position:'bottom'}}}});}
+function renderTable(data){ const rows=data.map(d=>`<tr><td title="${d.assunto}">${d.assunto}</td><td>${d.data}</td><td>${d.hora}</td><td>${d.dia}</td><td><span class="badge">${d.tipoCampanha}</span></td><td class="num">${d.leads}</td><td class="num">${d.entregues}</td><td class="num">${d.aberturas}</td><td class="num">${d.cliques}</td><td class="num">${fmtPct(d.taxaEntrega)}</td><td class="num">${fmtPct(d.taxaAbertura)}</td><td class="num">${fmtPct(d.ctr)}</td></tr>`).join(''); document.getElementById('tabelaDados').innerHTML=`<thead><tr><th>Assunto</th><th>Data</th><th>Horário</th><th>Dia</th><th>Campanha</th><th>Leads</th><th>Entregues</th><th>Aberturas</th><th>Cliques</th><th>Entrega</th><th>Abertura</th><th>CTR</th></tr></thead><tbody>${rows}</tbody>`;}
+function renderExecutive(data){ const avgCTR=media(data.map(d=>d.ctr)), avgAb=media(data.map(d=>d.taxaAbertura)); const best=[...data].sort((a,b)=>b.ctr-a.ctr)[0]||{}; document.getElementById('leituraExecutiva').innerHTML=`<h3>Leitura executiva da visão geral</h3><p>Com <b>${data.length}</b> disparos na base filtrada, a operação mantém <b>${fmtPct(media(data.map(d=>d.taxaEntrega)))}</b> de entrega média e <b>${fmtPct(avgAb)}</b> de abertura média. O principal ponto de atenção está na conversão para clique: <b>${fmtPct(avgCTR)}</b> de CTR médio.</p><p>Quando há intenção de clique, o melhor desempenho aparece em <b>${best.tipoCampanha||'-'}</b>, com <b>${fmtPct(best.ctr)}</b> de CTR. Reforce campanhas com proposta de valor clara e CTA visível.</p>`;}
+function aggDiaHora(data){ const map={}; data.forEach(d=>{ const key=d.dia+'|'+hourOnly(d.hora); map[key]=map[key]||{dia:d.dia,hora:hourOnly(d.hora),items:[]}; map[key].items.push(d);}); return Object.values(map).map(x=>({...x,ab:media(x.items.map(d=>d.taxaAbertura)),ctr:media(x.items.map(d=>d.ctr)),qtd:x.items.length}));}
+function renderHorarios(){ const data=filtered(); const agg=aggDiaHora(data); const labels=agg.map(x=>`${x.dia} • ${x.hora}`); const bestAb=[...agg].sort((a,b)=>b.ab-a.ab)[0]||{}, bestCtr=[...agg].sort((a,b)=>b.ctr-a.ctr)[0]||{}, worst=[...agg].sort((a,b)=>a.ab-a.ab||a.ctr-b.ctr)[0]||{}; document.getElementById('kpisHorarios').innerHTML=`<div class="card"><span>Melhor dia da semana (abertura)</span><h2>${bestAb.dia||'-'}</h2><p>${fmtPct(bestAb.ab)}</p></div><div class="card"><span>Melhor dia/horário (CTR)</span><h2>${bestCtr.dia||'-'} • ${bestCtr.hora||'-'}</h2><p>${fmtPct(bestCtr.ctr)}</p></div><div class="card"><span>Melhor horário de envio</span><h2>${bestCtr.hora||'-'}</h2><p>Equilíbrio entre abertura e clique</p></div><div class="card"><span>Pior dia / horário</span><h2>${worst.dia||'-'} • ${worst.hora||'-'}</h2><p>Ponto menos eficiente</p></div>`; destroy('aberturaDiaHora'); charts.aberturaDiaHora=new Chart(document.getElementById('aberturaDiaHora'),{type:'bar',data:{labels,datasets:[{label:'Taxa de abertura',data:agg.map(x=>x.ab),backgroundColor:'#00A6DF',borderRadius:8}]},options:{maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{ticks:{callback:v=>v+'%'},grid:{color:'rgba(102,115,145,.15)'}},y:{grid:{display:false}}}}}); destroy('ctrDiaHora'); charts.ctrDiaHora=new Chart(document.getElementById('ctrDiaHora'),{type:'bar',data:{labels,datasets:[{label:'Taxa de clique',data:agg.map(x=>x.ctr),backgroundColor:'#253F85',borderRadius:8}]},options:{maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{ticks:{callback:v=>v+'%'},grid:{color:'rgba(102,115,145,.15)'}},y:{grid:{display:false}}}}}); renderTabelaApoio();}
+function renderTabelaApoio(){ const dia=document.getElementById('fDiaApoio').value, hora=document.getElementById('fHoraApoio').value; const rows=aggDiaHora(filtered()).filter(x=>(dia==='Todos'||x.dia===dia)&&(hora==='Todos'||x.hora===hora)).map(x=>`<tr><td>${x.dia}</td><td>${x.hora}</td><td class="num">${fmtPct(x.ab)}</td><td class="num">${fmtPct(x.ctr)}</td><td class="num">${x.qtd}</td></tr>`).join(''); document.getElementById('tabelaApoio').innerHTML=`<thead><tr><th>Dia da semana</th><th>Horário</th><th>Média de abertura</th><th>Média de CTR</th><th>Quantidade de disparos</th></tr></thead><tbody>${rows}</tbody>`;}
+function rankData(){ const busca=(document.getElementById('rankBusca')?.value||'').toLowerCase(); const tipo=document.getElementById('rankTipo')?.value||'Todos'; return dados.filter(d=>(!busca||d.assunto.toLowerCase().includes(busca))&&(tipo==='Todos'||d.tipoCampanha===tipo));}
+function renderRanking(){ const mode=document.getElementById('rankMode').value; const data=rankData(); const metric=mode.includes('CTR')?'ctr':'taxaAbertura'; const asc=mode.includes('bottom'); const top=[...data].sort((a,b)=>asc?a[metric]-b[metric]:b[metric]-a[metric]).slice(0,10); destroy('rankingBar'); charts.rankingBar=new Chart(document.getElementById('rankingBar'),{type:'bar',data:{labels:top.map(d=>d.assunto),datasets:[{label:metric==='ctr'?'CTR':'Abertura',data:top.map(d=>d[metric]),backgroundColor:asc?'#E63946':'#00A6DF',borderRadius:8}]},options:{maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{ticks:{callback:v=>v+'%'},grid:{color:'rgba(102,115,145,.15)'}},y:{grid:{display:false}}}}}); const best=[...data].sort((a,b)=>b.taxaAbertura-a.taxaAbertura).slice(0,5); const worst=[...data].sort((a,b)=>a.taxaAbertura-b.taxaAbertura).slice(0,5); destroy('rankingComparativo'); charts.rankingComparativo=new Chart(document.getElementById('rankingComparativo'),{type:'bar',data:{labels:[...best.map(d=>'Top: '+d.assunto.slice(0,22)),...worst.map(d=>'Pior: '+d.assunto.slice(0,22))],datasets:[{label:'Abertura',data:[...best,...worst].map(d=>d.taxaAbertura),backgroundColor:[...best.map(()=> '#00A6DF'),...worst.map(()=> '#E63946')],borderRadius:8}]},options:{maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{ticks:{callback:v=>v+'%'},grid:{color:'rgba(102,115,145,.15)'}},y:{grid:{display:false}}}}}); const avgAb=media(dados.map(d=>d.taxaAbertura)), avgCtr=media(dados.map(d=>d.ctr)); document.getElementById('tabelaRanking').innerHTML=`<thead><tr><th>Assunto</th><th>Campanha</th><th>Abertura</th><th>CTR</th><th>Cliques</th><th>Comparação com a média geral</th></tr></thead><tbody>${top.map(d=>{const ok=d.taxaAbertura>=avgAb&&d.ctr>=avgCtr; return `<tr><td>${d.assunto}</td><td><span class="badge">${d.tipoCampanha}</span></td><td class="num">${fmtPct(d.taxaAbertura)}</td><td class="num">${fmtPct(d.ctr)}</td><td class="num">${d.cliques}</td><td><span class="badge ${ok?'tag-pos':'tag-neg'}">${ok?'Acima da média':'Abaixo/atenção'}</span> <span class="muted">Abertura ${d.taxaAbertura>=avgAb?'acima':'abaixo'} e CTR ${d.ctr>=avgCtr?'acima':'abaixo'} da média.</span></td></tr>`}).join('')}</tbody>`;}
+function renderInsights(){ const data=filtered(); const zero=data.filter(d=>d.ctr===0).length; const best=[...data].sort((a,b)=>b.ctr-a.ctr)[0]||{}; const worst=[...data].sort((a,b)=>a.taxaAbertura-b.taxaAbertura)[0]||{}; document.getElementById('insightsTexto').innerHTML=`<div class="insight-card"><h3>Melhor oportunidade</h3><p><b>${best.assunto||'-'}</b><br>CTR de ${fmtPct(best.ctr)}.</p></div><div class="insight-card"><h3>Ponto de atenção</h3><p><b>${zero}</b> campanha(s) com CTR zerado. Revise CTA, segmentação e proposta de valor.</p></div><div class="insight-card"><h3>Menor abertura</h3><p><b>${worst.assunto||'-'}</b><br>Abertura de ${fmtPct(worst.taxaAbertura)}.</p></div><div class="insight-card"><h3>Recomendação</h3><p>Priorize testes A/B em assunto, horário e CTA nas campanhas com abertura baixa ou CTR zerado.</p></div>`;}
+function renderAll(){ const data=filtered(); renderKPIs(data); renderVisaoCharts(data); renderTable(data); renderExecutive(data); renderHorarios(); renderRanking(); renderInsights(); }
+function resetFilters(){ ['fAssunto','fInicio','fFim'].forEach(id=>document.getElementById(id).value=''); document.getElementById('fTipo').value='Todos'; renderAll(); }
+function showSection(e,id){ e.preventDefault(); document.querySelectorAll('.section').forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active'); document.querySelectorAll('.nav a').forEach(a=>a.classList.remove('active')); e.target.classList.add('active'); if(id==='ranking') renderRanking(); if(id==='horarios') renderHorarios(); }
+function toggleTheme(){ document.documentElement.dataset.theme = document.documentElement.dataset.theme==='dark' ? '' : 'dark'; setTimeout(renderAll,50); }
+populateFilters(); renderAll();
 </script>
-
 </body>
 </html>
