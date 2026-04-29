@@ -1,319 +1,1351 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<title>Medportal | Disparos RD</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<!-- Google Font -->
-https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap
-
-<!-- Chart.js -->
-https://cdn.jsdelivr.net/npm/chart.jsscript>
-
-<style>
-:root{
-  --primary:#1E2D5C;
-  --secondary:#253F85;
-  --accent:#00A6DF;
-  --highlight:#F9BD00;
-  --bg:#ECF0F8;
-  --card:#FFFFFF;
-  --text:#383839;
-  --muted:#7B7D81;
-}
-*{box-sizing:border-box;font-family:'Roboto',sans-serif;}
-body{margin:0;background:var(--bg);color:var(--text);}
-
-.sidebar{
-  position:fixed;left:0;top:0;bottom:0;width:260px;
-  background:var(--primary);color:#fff;
-  padding:24px;display:flex;flex-direction:column;
-}
-.logo{margin-bottom:32px;text-align:center;}
-.logo img{max-width:180px;}
-
-.nav a{
-  display:block;color:#fff;text-decoration:none;
-  padding:12px 14px;border-radius:8px;
-  margin-bottom:6px;
-}
-.nav a.active,.nav a:hover{background:rgba(255,255,255,.15);}
-
-.theme-toggle{
-  margin-top:auto;
-  border:none;border-radius:8px;
-  background:rgba(255,255,255,.15);
-  color:#fff;padding:10px;
-  cursor:pointer;font-size:18px;
-}
-
-.main{margin-left:260px;padding:32px;}
-.section{display:none;}
-.section.active{display:block;}
-
-h1{margin-top:0;font-size:22px;}
-
-.kpis{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:16px;margin-bottom:24px;
-}
-.card{
-  background:var(--card);
-  border-radius:12px;padding:20px;
-  box-shadow:0 6px 18px rgba(0,0,0,.08);
-}
-.card span{font-size:13px;color:var(--muted);}
-.card h2{margin:8px 0;color:var(--secondary);}
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(420px,1fr));
-  gap:24px;
-}
-.chart-card{
-  background:var(--card);
-  border-radius:12px;padding:20px;
-  box-shadow:0 6px 18px rgba(0,0,0,.08);
-}
-
-table{width:100%;border-collapse:collapse;font-size:13px;}
-th,td{padding:10px;border-bottom:1px solid #ddd;}
-th{background:#f3f5fb;}
-tr:hover{background:#f9fafc;}
-
-.help{
-  float:right;
-  background:var(--accent);
-  color:#fff;
-  border-radius:50%;
-  width:20px;height:20px;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  font-size:12px;
-  cursor:pointer;
-}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard Medportal | Disparos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --primary:#1E2D5C;
+      --secondary:#253F85;
+      --accent:#00A6DF;
+      --support:#F9BD00;
+      --bg:#ECF2FB;
+      --card:#ffffff;
+      --card-2:#F7F9FD;
+      --text:#22304A;
+      --muted:#6F7A90;
+      --border:rgba(37,63,133,.14);
+      --shadow:0 10px 35px rgba(30,45,92,.10);
+      --success:#16a34a;
+      --warning:#f59e0b;
+      --danger:#dc2626;
+    }
+    [data-theme="dark"] {
+      --bg:#0D1530;
+      --card:#131E43;
+      --card-2:#0F1836;
+      --text:#E9EEF8;
+      --muted:#AAB5D1;
+      --border:rgba(255,255,255,.08);
+      --shadow:0 10px 35px rgba(0,0,0,.32);
+    }
+    * { box-sizing:border-box; }
+    body {
+      margin:0;
+      font-family:'Inter',system-ui,sans-serif;
+      background:linear-gradient(180deg, rgba(0,166,223,.08), transparent 180px), var(--bg);
+      color:var(--text);
+    }
+    .app { display:flex; min-height:100vh; }
+    .sidebar {
+      width:280px;
+      background:linear-gradient(180deg, var(--primary), #16244A 100%);
+      color:#fff;
+      padding:24px 20px;
+      position:fixed; inset:0 auto 0 0;
+      display:flex; flex-direction:column; gap:22px;
+      box-shadow: 8px 0 30px rgba(15,23,42,.18);
+      z-index:100;
+    }
+    .brand {
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:20px;
+      padding:18px;
+      display:flex; align-items:center; justify-content:center;
+      min-height:90px;
+    }
+    .brand img {
+      max-width:170px; width:100%; height:auto; object-fit:contain;
+    }
+    .brand .fallback { font-size:26px; font-weight:800; letter-spacing:.4px; }
+    .nav {
+      display:flex; flex-direction:column; gap:8px;
+    }
+    .nav button {
+      border:none;
+      background:transparent;
+      color:#E7ECFA;
+      text-align:left;
+      padding:14px 16px;
+      border-radius:14px;
+      font-size:14px;
+      font-weight:600;
+      cursor:pointer;
+      transition:.2s ease;
+    }
+    .nav button:hover {
+      background:rgba(255,255,255,.08);
+    }
+    .nav button.active {
+      background:#fff;
+      color:var(--primary);
+      box-shadow:0 12px 24px rgba(0,0,0,.18);
+    }
+    .sidebar-footer {
+      margin-top:auto;
+      display:flex; align-items:center; justify-content:space-between;
+      gap:12px;
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:16px;
+      padding:12px 14px;
+    }
+    .theme-toggle {
+      border:none;
+      background:#fff;
+      color:var(--primary);
+      border-radius:12px;
+      padding:8px 12px;
+      font-size:18px;
+      cursor:pointer;
+      font-weight:700;
+    }
+    .content {
+      margin-left:280px;
+      width:calc(100% - 280px);
+      padding:26px;
+    }
+    .section { display:none; }
+    .section.active { display:block; }
+    .section-header {
+      display:flex; align-items:flex-start; justify-content:space-between;
+      gap:16px; margin-bottom:20px;
+    }
+    .title-wrap h1 {
+      margin:0;
+      font-size:34px;
+      line-height:1.05;
+      font-weight:800;
+    }
+    .title-wrap p {
+      margin:8px 0 0;
+      color:var(--muted);
+      max-width:860px;
+      font-size:14px;
+      line-height:1.55;
+    }
+    .header-actions { display:flex; align-items:center; gap:10px; }
+    .ghost-btn {
+      border:1px solid var(--border);
+      background:var(--card);
+      color:var(--text);
+      border-radius:14px;
+      min-width:42px;
+      height:42px;
+      padding:0 14px;
+      font-weight:700;
+      cursor:pointer;
+      box-shadow:var(--shadow);
+    }
+    .filters-card, .panel, .kpi-card, .chart-card, .table-card, .insight-card, .callout {
+      background:var(--card);
+      border:1px solid var(--border);
+      box-shadow:var(--shadow);
+      border-radius:22px;
+    }
+    .filters-card {
+      padding:16px;
+      margin-bottom:18px;
+    }
+    .filter-grid {
+      display:grid;
+      grid-template-columns: repeat(5, minmax(0,1fr));
+      gap:12px;
+    }
+    .filter-group label {
+      display:block; font-size:12px; color:var(--muted); margin-bottom:6px; font-weight:600;
+    }
+    input, select {
+      width:100%;
+      background:var(--card-2);
+      color:var(--text);
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:11px 12px;
+      font:inherit;
+    }
+    .multi-cols { position:relative; }
+    .dropdown-panel {
+      position:absolute; top:100%; right:0; margin-top:8px;
+      width:260px; background:var(--card);
+      border:1px solid var(--border); border-radius:18px;
+      box-shadow:var(--shadow); padding:14px; display:none; z-index:30;
+    }
+    .dropdown-panel.open { display:block; }
+    .dropdown-panel h4 { margin:0 0 10px; font-size:13px; }
+    .checkbox-list { display:grid; gap:8px; max-height:260px; overflow:auto; }
+    .checkbox-list label { display:flex; gap:10px; align-items:center; font-size:13px; color:var(--text); }
+    .checkbox-list input { width:auto; }
+    .kpi-grid {
+      display:grid;
+      grid-template-columns: repeat(7, minmax(0,1fr));
+      gap:14px;
+      margin-bottom:20px;
+    }
+    .kpi-card {
+      padding:18px;
+      position:relative;
+      overflow:hidden;
+    }
+    .kpi-card::after {
+      content:"";
+      position:absolute; top:0; right:0; width:72px; height:72px;
+      background:radial-gradient(circle at center, rgba(0,166,223,.18), transparent 68%);
+      pointer-events:none;
+    }
+    .kpi-label {
+      font-size:12px;
+      color:var(--muted);
+      font-weight:600;
+      min-height:32px;
+    }
+    .kpi-value {
+      margin-top:12px;
+      font-size:28px;
+      font-weight:800;
+      line-height:1;
+      color:var(--secondary);
+    }
+    .kpi-note {
+      margin-top:8px;
+      font-size:12px;
+      color:var(--muted);
+    }
+    .grid-2 {
+      display:grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap:18px;
+      margin-bottom:18px;
+    }
+    .grid-3 {
+      display:grid;
+      grid-template-columns: 1.2fr 1fr 1fr;
+      gap:18px;
+      margin-bottom:18px;
+    }
+    .chart-card, .table-card, .insight-card, .panel, .callout {
+      padding:18px;
+    }
+    .card-head {
+      display:flex; justify-content:space-between; gap:12px; align-items:flex-start;
+      margin-bottom:14px;
+    }
+    .card-head h3 {
+      margin:0;
+      font-size:16px;
+      font-weight:800;
+    }
+    .card-head p {
+      margin:4px 0 0;
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.45;
+    }
+    .chart-wrap { height:320px; }
+    .chart-wrap.small { height:260px; }
+    .table-scroll {
+      overflow:auto;
+      max-width:100%;
+      border-radius:16px;
+      border:1px solid var(--border);
+    }
+    table {
+      width:100%;
+      border-collapse:collapse;
+      min-width:860px;
+      background:var(--card);
+    }
+    th, td {
+      padding:12px 14px;
+      border-bottom:1px solid var(--border);
+      text-align:left;
+      font-size:13px;
+      vertical-align:top;
+    }
+    th {
+      position:sticky; top:0;
+      background:var(--card-2);
+      z-index:1;
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.04em;
+      color:var(--muted);
+    }
+    tbody tr:hover { background:rgba(0,166,223,.05); }
+    .badge {
+      display:inline-flex; align-items:center;
+      padding:6px 10px; border-radius:999px;
+      font-size:12px; font-weight:700;
+      background:rgba(0,166,223,.12);
+      color:var(--accent);
+    }
+    .badge.good { background:rgba(22,163,74,.12); color:var(--success); }
+    .badge.warn { background:rgba(245,158,11,.12); color:var(--warning); }
+    .badge.bad { background:rgba(220,38,38,.12); color:var(--danger); }
+    .heatmap {
+      display:grid;
+      grid-template-columns: 130px repeat(10, 1fr);
+      gap:6px;
+      align-items:stretch;
+      font-size:12px;
+    }
+    .heatmap .cell, .heatmap .head {
+      border-radius:12px;
+      padding:10px 8px;
+      text-align:center;
+      border:1px solid var(--border);
+      background:var(--card-2);
+    }
+    .heatmap .row-head {
+      text-align:left;
+      font-weight:700;
+      display:flex; align-items:center;
+    }
+    .heatmap .metric {
+      font-weight:700;
+      font-size:13px;
+    }
+    .heatmap .sub {
+      display:block;
+      margin-top:4px;
+      color:var(--muted);
+      font-size:11px;
+    }
+    .split {
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:18px;
+    }
+    .insights-grid {
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap:18px;
+    }
+    .insight-card h3 { margin:0 0 12px; font-size:18px; }
+    .insight-card ul { margin:0; padding-left:18px; display:grid; gap:10px; }
+    .insight-card li { line-height:1.55; color:var(--text); font-size:14px; }
+    .callout {
+      margin-top:18px;
+      background:linear-gradient(135deg, rgba(0,166,223,.16), rgba(249,189,0,.16));
+    }
+    .callout h3 { margin:0 0 8px; }
+    .legend {
+      display:flex; gap:10px; flex-wrap:wrap;
+      margin-top:8px;
+      font-size:12px;
+      color:var(--muted);
+    }
+    .dot {
+      width:10px; height:10px; border-radius:999px; display:inline-block;
+    }
+    .modal {
+      position:fixed; inset:0;
+      background:rgba(9,16,38,.52);
+      display:none; align-items:center; justify-content:center;
+      padding:20px;
+      z-index:200;
+    }
+    .modal.open { display:flex; }
+    .modal-box {
+      width:min(760px, 100%);
+      max-height:90vh; overflow:auto;
+      background:var(--card);
+      color:var(--text);
+      border-radius:24px;
+      padding:22px;
+      border:1px solid var(--border);
+      box-shadow:var(--shadow);
+    }
+    .modal-box h2 { margin:0 0 8px; }
+    .modal-box p, .modal-box li { color:var(--text); line-height:1.6; }
+    .table-kpi { font-weight:700; }
+    @media (max-width: 1400px) {
+      .kpi-grid { grid-template-columns: repeat(4, minmax(0,1fr)); }
+      .grid-2, .grid-3, .split, .insights-grid { grid-template-columns:1fr; }
+      .filter-grid { grid-template-columns: repeat(3, minmax(0,1fr)); }
+    }
+    @media (max-width: 980px) {
+      .sidebar {
+        position:static; width:100%; border-radius:0; min-height:auto;
+      }
+      .content { margin-left:0; width:100%; padding:18px; }
+      .app { flex-direction:column; }
+      .kpi-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .filter-grid { grid-template-columns:1fr 1fr; }
+    }
+    @media (max-width: 640px) {
+      .kpi-grid, .filter-grid { grid-template-columns:1fr; }
+      .title-wrap h1 { font-size:28px; }
+      .section-header { flex-direction:column; }
+    }
+  </style>
 </head>
+<body data-theme="light">
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <img src="logo-play-azulclaro(3).png" alt="Medportal" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+        <div class="fallback" style="display:none;">Medportal</div>
+      </div>
 
-<body>
+      <nav class="nav">
+        <button class="active" data-section="geral">Visão Geral</button>
+        <button data-section="horarios">Horários e Dias</button>
+        <button data-section="ranking">Ranking</button>
+        <button data-section="insights">Insights</button>
+      </nav>
 
-<div class="sidebar">
-  <div class="logo">
-    logo-play-azulclaro(3).png
+      <div class="sidebar-footer">
+        <div>
+          <div style="font-size:13px;font-weight:700;">Dashboard online</div>
+          <div style="font-size:12px;color:rgba(255,255,255,.72);">Dados de disparos</div>
+        </div>
+        <button class="theme-toggle" id="themeToggle" title="Alternar tema">🌙 ☀️</button>
+      </div>
+    </aside>
+
+    <main class="content">
+      <section class="section active" id="geral">
+        <div class="section-header">
+          <div class="title-wrap">
+            <h1>Dashboard</h1>
+            <p>Visão consolidada de tudo o que foi disparado e do desempenho geral dos e-mails, com foco em volume, entrega, abertura, clique e consulta detalhada da base.</p>
+          </div>
+          <div class="header-actions">
+            <button class="ghost-btn help-btn" data-help="geral">?</button>
+          </div>
+        </div>
+
+        <div class="filters-card">
+          <div class="filter-grid">
+            <div class="filter-group">
+              <label for="filterSearch">Buscar por assunto</label>
+              <input id="filterSearch" type="text" placeholder="Digite parte do assunto">
+            </div>
+            <div class="filter-group">
+              <label for="filterType">Tipo de campanha</label>
+              <select id="filterType">
+                <option value="">Todos</option>
+                <option>Webinar</option>
+                <option>Treinamento</option>
+                <option>Suporte</option>
+                <option>Informativo</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label for="filterStart">Data inicial</label>
+              <input id="filterStart" type="date">
+            </div>
+            <div class="filter-group">
+              <label for="filterEnd">Data final</label>
+              <input id="filterEnd" type="date">
+            </div>
+            <div class="filter-group multi-cols">
+              <label>Colunas visíveis</label>
+              <button class="ghost-btn" id="columnsBtn" style="width:100%; justify-content:center;">Selecionar colunas</button>
+              <div class="dropdown-panel" id="columnsPanel">
+                <h4>Escolha as informações da tabela</h4>
+                <div class="checkbox-list" id="columnChecks"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="kpi-grid" id="overviewKpis"></div>
+
+        <div class="grid-2">
+          <div class="chart-card">
+            <div class="card-head">
+              <div>
+                <h3>Evolução mensal</h3>
+                <p>E-mails enviados, taxa média de abertura e taxa média de clique por mês de disparo.</p>
+              </div>
+            </div>
+            <div class="chart-wrap"><canvas id="monthlyChart"></canvas></div>
+          </div>
+
+          <div class="chart-card">
+            <div class="card-head">
+              <div>
+                <h3>Comparação geral</h3>
+                <p>Relação entre abertura média e clique médio para leitura rápida do funil principal.</p>
+              </div>
+            </div>
+            <div class="chart-wrap small"><canvas id="compareChart"></canvas></div>
+            <div class="legend">
+              <span><span class="dot" style="background:#253F85;"></span> Taxa média de abertura</span>
+              <span><span class="dot" style="background:#00A6DF;"></span> Taxa média de clique</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="chart-card">
+            <div class="card-head">
+              <div>
+                <h3>Distribuição de CTR</h3>
+                <p>Percentual de e-mails com CTR zerado, baixo, médio ou alto.</p>
+              </div>
+            </div>
+            <div class="chart-wrap small"><canvas id="distributionChart"></canvas></div>
+          </div>
+
+          <div class="callout" id="overviewCallout"></div>
+        </div>
+
+        <div class="table-card">
+          <div class="card-head">
+            <div>
+              <h3>Tabela detalhada</h3>
+              <p>Consulta completa da base com data, horário, volume e indicadores principais. Os filtros acima atualizam esta tabela e todos os gráficos da página.</p>
+            </div>
+            <span class="badge" id="tableCounter">0 registros</span>
+          </div>
+          <div class="table-scroll">
+            <table id="overviewTable">
+              <thead></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="horarios">
+        <div class="section-header">
+          <div class="title-wrap">
+            <h1>Dashboard</h1>
+            <p>Entendimento do melhor momento para disparar, cruzando dia da semana e horário para encontrar janelas com mais abertura e mais clique.</p>
+          </div>
+          <div class="header-actions">
+            <button class="ghost-btn help-btn" data-help="horarios">?</button>
+          </div>
+        </div>
+
+        <div class="kpi-grid" id="scheduleKpis"></div>
+
+        <div class="split">
+          <div class="panel">
+            <div class="card-head">
+              <div>
+                <h3>Heatmap — Taxa de abertura</h3>
+                <p>Quanto mais intenso o tom, melhor o resultado médio naquele cruzamento entre dia e hora.</p>
+              </div>
+            </div>
+            <div id="openHeatmap" class="heatmap"></div>
+          </div>
+          <div class="panel">
+            <div class="card-head">
+              <div>
+                <h3>Heatmap — Taxa de clique</h3>
+                <p>Leitura rápida das combinações com maior potencial de conversão para clique.</p>
+              </div>
+            </div>
+            <div id="ctrHeatmap" class="heatmap"></div>
+          </div>
+        </div>
+
+        <div class="grid-3">
+          <div class="chart-card">
+            <div class="card-head"><div><h3>Média de abertura por dia</h3><p>Comparativo direto entre os dias da semana presentes na base.</p></div></div>
+            <div class="chart-wrap small"><canvas id="dayOpenChart"></canvas></div>
+          </div>
+          <div class="chart-card">
+            <div class="card-head"><div><h3>Média de CTR por dia</h3><p>CTR médio por dia da semana.</p></div></div>
+            <div class="chart-wrap small"><canvas id="dayCtrChart"></canvas></div>
+          </div>
+          <div class="chart-card">
+            <div class="card-head"><div><h3>Performance por faixa horária</h3><p>Manhã, tarde e fim do dia comparados em abertura e CTR.</p></div></div>
+            <div class="chart-wrap small"><canvas id="timeBandChart"></canvas></div>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <div class="card-head">
+            <div>
+              <h3>Tabela de apoio</h3>
+              <p>Resumo por dia e horário com média de abertura, média de CTR e volume de disparos.</p>
+            </div>
+          </div>
+          <div class="table-scroll">
+            <table id="scheduleTable">
+              <thead></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="ranking">
+        <div class="section-header">
+          <div class="title-wrap">
+            <h1>Dashboard</h1>
+            <p>Identificação dos e-mails que deram certo e dos que precisam de ajuste, priorizando abertura, CTR, cliques absolutos e comparação com a média geral.</p>
+          </div>
+          <div class="header-actions">
+            <button class="ghost-btn help-btn" data-help="ranking">?</button>
+          </div>
+        </div>
+
+        <div class="filters-card">
+          <div class="filter-grid">
+            <div class="filter-group">
+              <label for="rankingMode">Ranking principal</label>
+              <select id="rankingMode">
+                <option value="open">Top 10 abertura</option>
+                <option value="ctr">Top 10 CTR</option>
+                <option value="clicks">Top 10 cliques</option>
+                <option value="bottom">Bottom 10 engajamento</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label for="rankingSearch">Buscar por assunto</label>
+              <input id="rankingSearch" type="text" placeholder="Filtrar ranking">
+            </div>
+            <div class="filter-group">
+              <label for="rankingType">Tipo de campanha</label>
+              <select id="rankingType">
+                <option value="">Todos</option>
+                <option>Webinar</option>
+                <option>Treinamento</option>
+                <option>Suporte</option>
+                <option>Informativo</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="chart-card">
+            <div class="card-head">
+              <div>
+                <h3>Ranking em barras</h3>
+                <p id="rankingChartDesc">Comparação dos melhores resultados da base conforme a métrica selecionada.</p>
+              </div>
+            </div>
+            <div class="chart-wrap"><canvas id="rankingBarChart"></canvas></div>
+          </div>
+          <div class="chart-card">
+            <div class="card-head">
+              <div>
+                <h3>Dispersão: abertura × CTR</h3>
+                <p>Outliers ajudam a identificar campanhas com forte interesse, baixa conversão ou excelente equilíbrio entre as duas métricas.</p>
+              </div>
+            </div>
+            <div class="chart-wrap"><canvas id="scatterChart"></canvas></div>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <div class="card-head">
+            <div>
+              <h3>Tabela comparativa</h3>
+              <p>Assunto, tipo, desempenho e comparação com a média geral da base. Como a planilha enviada não traz o corpo do e-mail, a visualização está baseada no assunto e nos indicadores.</p>
+            </div>
+          </div>
+          <div class="table-scroll">
+            <table id="rankingTable">
+              <thead></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="insights">
+        <div class="section-header">
+          <div class="title-wrap">
+            <h1>Dashboard</h1>
+            <p>Aba estratégica para transformar número em decisão: o que está funcionando, onde estão os gargalos, quais oportunidades estão pouco exploradas e quais ações práticas devem entrar na próxima rodada de disparos.</p>
+          </div>
+          <div class="header-actions">
+            <button class="ghost-btn help-btn" data-help="insights">?</button>
+          </div>
+        </div>
+
+        <div class="insights-grid" id="insightsGrid"></div>
+        <div class="callout" id="strategyCallout"></div>
+      </section>
+    </main>
   </div>
 
-  <div class="nav">
-    #">Visão Geral</a>
-    #">Horários e Dias</a>
-    #">Ranking</a>
-    #">Insights</a>
+  <div class="modal" id="helpModal">
+    <div class="modal-box">
+      <div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start;">
+        <div>
+          <h2>Explicação dos dados</h2>
+          <p id="helpText">Carregando...</p>
+        </div>
+        <button class="ghost-btn" id="closeHelp">✕</button>
+      </div>
+      <ul>
+        <li><strong>Total de e-mails disparados:</strong> quantidade de registros da base.</li>
+        <li><strong>Leads selecionados:</strong> total de contatos escolhidos antes do envio.</li>
+        <li><strong>Entregues:</strong> total de e-mails aceitos e entregues.</li>
+        <li><strong>Taxa de entrega:</strong> percentual médio de entregues sobre leads selecionados.</li>
+        <li><strong>Taxa de abertura:</strong> percentual médio de aberturas únicas.</li>
+        <li><strong>CTR:</strong> percentual médio de cliques únicos.</li>
+        <li><strong>Heatmaps:</strong> combinam dia e hora para mostrar em quais janelas a performance média foi mais forte.</li>
+        <li><strong>Ranking e dispersão:</strong> mostram quais campanhas puxam a média para cima e quais precisam de ajuste.</li>
+      </ul>
+    </div>
   </div>
 
-  <button class="theme-toggle" onclick="toggleTheme()">🌙 ☀️</button>
-</div>
+  <script>
+    const rawData = [{"subject": "Dezembro Vermelho: Prevenção é um ato de cuidado", "date": "2025-12-03", "dateLabel": "03/12/2025", "time": "08:00", "hour": 8, "weekday": "Quarta-feira", "weekdayIndex": 2, "leads": 691, "delivered": 671, "bounce": 20, "opens": 151, "clicks": 0, "deliveryRate": 97.11, "openRate": 22.5, "ctr": 0.0, "campaignType": "Informativo"}, {"subject": "Suporte Medportal com horário reduzido nesta sexta-feira, antecipe suas solicitações!", "date": "2025-12-09", "dateLabel": "09/12/2025", "time": "17:38", "hour": 17, "weekday": "Terça-feira", "weekdayIndex": 1, "leads": 256, "delivered": 242, "bounce": 14, "opens": 78, "clicks": 0, "deliveryRate": 94.53, "openRate": 32.23, "ctr": 0.0, "campaignType": "Suporte"}, {"subject": "Atualização dos Treinamentos Medportal", "date": "2025-12-10", "dateLabel": "10/12/2025", "time": "10:00", "hour": 10, "weekday": "Quarta-feira", "weekdayIndex": 2, "leads": 691, "delivered": 653, "bounce": 38, "opens": 157, "clicks": 0, "deliveryRate": 94.5, "openRate": 24.04, "ctr": 0.0, "campaignType": "Treinamento"}, {"subject": "Como construir uma LNT baseada em dados?", "date": "2025-12-15", "dateLabel": "15/12/2025", "time": "10:00", "hour": 10, "weekday": "Segunda-feira", "weekdayIndex": 0, "leads": 696, "delivered": 657, "bounce": 39, "opens": 177, "clicks": 17, "deliveryRate": 94.4, "openRate": 26.94, "ctr": 2.59, "campaignType": "Informativo"}, {"subject": "Lançamento de Novos Treinamentos Medportal em Gestão e Qualidade", "date": "2025-12-17", "dateLabel": "17/12/2025", "time": "10:00", "hour": 10, "weekday": "Quarta-feira", "weekdayIndex": 2, "leads": 688, "delivered": 660, "bounce": 28, "opens": 148, "clicks": 0, "deliveryRate": 95.93, "openRate": 22.42, "ctr": 0.0, "campaignType": "Treinamento"}, {"subject": "Lançamento no Medportal: O seu Aplicativo de Inteligência Artificial  ??", "date": "2025-12-19", "dateLabel": "19/12/2025", "time": "15:32", "hour": 15, "weekday": "Sexta-feira", "weekdayIndex": 4, "leads": 694, "delivered": 661, "bounce": 33, "opens": 142, "clicks": 22, "deliveryRate": 95.24, "openRate": 21.48, "ctr": 3.33, "campaignType": "Informativo"}, {"subject": "Atualização de Treinamento: Cuidados com Traqueostomia", "date": "2025-12-22", "dateLabel": "22/12/2025", "time": "10:00", "hour": 10, "weekday": "Segunda-feira", "weekdayIndex": 0, "leads": 687, "delivered": 655, "bounce": 32, "opens": 156, "clicks": 0, "deliveryRate": 95.34, "openRate": 23.82, "ctr": 0.0, "campaignType": "Treinamento"}, {"subject": "Janeiro Branco 2026: Saúde Mental como Prática no Ambiente Hospitalar", "date": "2025-12-29", "dateLabel": "29/12/2025", "time": "10:00", "hour": 10, "weekday": "Segunda-feira", "weekdayIndex": 0, "leads": 696, "delivered": 662, "bounce": 34, "opens": 165, "clicks": 0, "deliveryRate": 95.11, "openRate": 24.92, "ctr": 0.0, "campaignType": "Informativo"}, {"subject": "Novos Treinamentos Disponíveis do Pacote Ferramentas de Gestão", "date": "2026-01-06", "dateLabel": "06/01/2026", "time": "10:00", "hour": 10, "weekday": "Terça-feira", "weekdayIndex": 1, "leads": 696, "delivered": 665, "bounce": 31, "opens": 162, "clicks": 0, "deliveryRate": 95.55, "openRate": 24.36, "ctr": 0.0, "campaignType": "Treinamento"}, {"subject": "Atualização de treinamentos: Comunicação Assertiva, Gestão de Indicadores e Mapeamento de processos", "date": "2026-01-12", "dateLabel": "12/01/2026", "time": "10:00", "hour": 10, "weekday": "Segunda-feira", "weekdayIndex": 0, "leads": 684, "delivered": 659, "bounce": 25, "opens": 160, "clicks": 0, "deliveryRate": 96.35, "openRate": 24.28, "ctr": 0.0, "campaignType": "Treinamento"}, {"subject": "Integração de Novos Colaboradores com o Medportal", "date": "2026-01-15", "dateLabel": "15/01/2026", "time": "10:00", "hour": 10, "weekday": "Quinta-feira", "weekdayIndex": 3, "leads": 673, "delivered": 630, "bounce": 43, "opens": 189, "clicks": 7, "deliveryRate": 93.61, "openRate": 30.0, "ctr": 1.11, "campaignType": "Informativo"}, {"subject": "Boas Práticas na Segmentação de Alunos na Plataforma", "date": "2026-01-28", "dateLabel": "28/01/2026", "time": "14:47", "hour": 14, "weekday": "Quarta-feira", "weekdayIndex": 2, "leads": 268, "delivered": 260, "bounce": 8, "opens": 100, "clicks": 6, "deliveryRate": 97.01, "openRate": 38.46, "ctr": 2.31, "campaignType": "Informativo"}, {"subject": "Nova funcionalidade: Solicitação de Conteúdos pela plataforma", "date": "2026-01-30", "dateLabel": "30/01/2026", "time": "10:00", "hour": 10, "weekday": "Sexta-feira", "weekdayIndex": 4, "leads": 679, "delivered": 655, "bounce": 24, "opens": 204, "clicks": 0, "deliveryRate": 96.47, "openRate": 31.15, "ctr": 0.0, "campaignType": "Treinamento"}, {"subject": "Convite Exclusivo | Webinar: Como Medir a Eficácia dos Treinamentos?", "date": "2026-02-02", "dateLabel": "02/02/2026", "time": "16:45", "hour": 16, "weekday": "Segunda-feira", "weekdayIndex": 0, "leads": 783, "delivered": 765, "bounce": 18, "opens": 196, "clicks": 66, "deliveryRate": 97.7, "openRate": 25.62, "ctr": 8.63, "campaignType": "Webinar"}, {"subject": "[Suporte Medportal] Avalie nosso atendimento (leva menos de 1 minuto)", "date": "2026-02-03", "dateLabel": "03/02/2026", "time": "15:03", "hour": 15, "weekday": "Terça-feira", "weekdayIndex": 1, "leads": 69, "delivered": 69, "bounce": 0, "opens": 22, "clicks": 8, "deliveryRate": 100.0, "openRate": 31.88, "ctr": 11.59, "campaignType": "Suporte"}, {"subject": "Revisão Mensal de Educação Digital", "date": "2026-02-06", "dateLabel": "06/02/2026", "time": "16:38", "hour": 16, "weekday": "Sexta-feira", "weekdayIndex": 4, "leads": 268, "delivered": 260, "bounce": 8, "opens": 97, "clicks": 27, "deliveryRate": 97.01, "openRate": 37.31, "ctr": 10.38, "campaignType": "Informativo"}, {"subject": "Medportal Academy: Atualização dos treinamentos NR-32", "date": "2026-02-09", "dateLabel": "09/02/2026", "time": "12:34", "hour": 12, "weekday": "Segunda-feira", "weekdayIndex": 0, "leads": 704, "delivered": 682, "bounce": 22, "opens": 179, "clicks": 0, "deliveryRate": 96.88, "openRate": 26.25, "ctr": 0.0, "campaignType": "Treinamento"}, {"subject": "Suporte Medportal: Atendimento no Carnaval", "date": "2026-02-11", "dateLabel": "11/02/2026", "time": "17:00", "hour": 17, "weekday": "Quarta-feira", "weekdayIndex": 2, "leads": 268, "delivered": 260, "bounce": 8, "opens": 77, "clicks": 0, "deliveryRate": 97.01, "openRate": 29.62, "ctr": 0.0, "campaignType": "Suporte"}, {"subject": "Webinar Medportal | Como medir a eficácia dos treinamentos?", "date": "2026-02-12", "dateLabel": "12/02/2026", "time": "10:00", "hour": 10, "weekday": "Quinta-feira", "weekdayIndex": 3, "leads": 781, "delivered": 753, "bounce": 28, "opens": 173, "clicks": 47, "deliveryRate": 96.41, "openRate": 22.97, "ctr": 6.24, "campaignType": "Webinar"}, {"subject": "[Suporte Medportal] Avalie nosso atendimento (leva menos de 1 minuto)", "date": "2026-02-19", "dateLabel": "19/02/2026", "time": "16:30", "hour": 16, "weekday": "Quinta-feira", "weekdayIndex": 3, "leads": 43, "delivered": 43, "bounce": 0, "opens": 14, "clicks": 4, "deliveryRate": 100.0, "openRate": 32.56, "ctr": 9.3, "campaignType": "Suporte"}, {"subject": "Como Utilizar os Cursos do Medportal Academy", "date": "2026-02-23", "dateLabel": "23/02/2026", "time": "16:09", "hour": 16, "weekday": "Segunda-feira", "weekdayIndex": 0, "leads": 266, "delivered": 263, "bounce": 3, "opens": 80, "clicks": 18, "deliveryRate": 98.87, "openRate": 30.42, "ctr": 6.84, "campaignType": "Treinamento"}, {"subject": "Atualização de Treinamentos Conforme as Diretrizes da American Heart Association (AHA)", "date": "2026-02-24", "dateLabel": "24/02/2026", "time": "10:41", "hour": 10, "weekday": "Terça-feira", "weekdayIndex": 1, "leads": 701, "delivered": 684, "bounce": 17, "opens": 172, "clicks": 0, "deliveryRate": 97.57, "openRate": 25.15, "ctr": 0.0, "campaignType": "Treinamento"}, {"subject": "Webinar Exclusivo Medportal | É amanhã", "date": "2026-02-25", "dateLabel": "25/02/2026", "time": "15:58", "hour": 15, "weekday": "Quarta-feira", "weekdayIndex": 2, "leads": 116, "delivered": 113, "bounce": 3, "opens": 61, "clicks": 15, "deliveryRate": 97.41, "openRate": 53.98, "ctr": 13.27, "campaignType": "Webinar"}, {"subject": "Webinar Exclusivo Medportal já vai começar!", "date": "2026-02-26", "dateLabel": "26/02/2026", "time": "12:55", "hour": 12, "weekday": "Quinta-feira", "weekdayIndex": 3, "leads": 121, "delivered": 120, "bounce": 1, "opens": 59, "clicks": 39, "deliveryRate": 99.17, "openRate": 49.17, "ctr": 32.5, "campaignType": "Webinar"}, {"subject": "Webinar Exclusivo Medportal já começou!", "date": "2026-02-26", "dateLabel": "26/02/2026", "time": "14:34", "hour": 14, "weekday": "Quinta-feira", "weekdayIndex": 3, "leads": 125, "delivered": 124, "bounce": 1, "opens": 53, "clicks": 2, "deliveryRate": 99.2, "openRate": 42.74, "ctr": 1.61, "campaignType": "Webinar"}, {"subject": "Webinar Exclusivo | Sua opinião é muito importante", "date": "2026-02-26", "dateLabel": "26/02/2026", "time": "15:40", "hour": 15, "weekday": "Quinta-feira", "weekdayIndex": 3, "leads": 125, "delivered": 124, "bounce": 1, "opens": 48, "clicks": 13, "deliveryRate": 99.2, "openRate": 38.71, "ctr": 10.48, "campaignType": "Webinar"}, {"subject": "Redução de Glosas: Proposta de Trilha Estratégica para sua Instituição", "date": "2026-03-02", "dateLabel": "02/03/2026", "time": "12:38", "hour": 12, "weekday": "Segunda-feira", "weekdayIndex": 0, "leads": 747, "delivered": 717, "bounce": 30, "opens": 192, "clicks": 2, "deliveryRate": 95.98, "openRate": 26.78, "ctr": 0.28, "campaignType": "Informativo"}, {"subject": "Menos operação na plataforma Medportal, mais visão estratégica!", "date": "2026-03-09", "dateLabel": "09/03/2026", "time": "12:00", "hour": 12, "weekday": "Segunda-feira", "weekdayIndex": 0, "leads": 270, "delivered": 265, "bounce": 5, "opens": 79, "clicks": 3, "deliveryRate": 98.15, "openRate": 29.81, "ctr": 1.13, "campaignType": "Informativo"}, {"subject": "Comunicação entre equipes: um ponto crítico para a segurança do cuidado", "date": "2026-03-13", "dateLabel": "13/03/2026", "time": "16:22", "hour": 16, "weekday": "Sexta-feira", "weekdayIndex": 4, "leads": 731, "delivered": 703, "bounce": 27, "opens": 186, "clicks": 0, "deliveryRate": 96.3, "openRate": 26.46, "ctr": 0.0, "campaignType": "Informativo"}, {"subject": "Novo treinamento Medportal: Suporte Básico de Vida Intra-hospitalar - AHA 2025", "date": "2026-03-16", "dateLabel": "16/03/2026", "time": "16:06", "hour": 16, "weekday": "Segunda-feira", "weekdayIndex": 0, "leads": 777, "delivered": 760, "bounce": 17, "opens": 213, "clicks": 1, "deliveryRate": 97.81, "openRate": 28.03, "ctr": 0.13, "campaignType": "Suporte"}, {"subject": "Novo treinamento Medportal: Atualizações do Caderno ONA 2025", "date": "2026-03-18", "dateLabel": "18/03/2026", "time": "11:00", "hour": 11, "weekday": "Quarta-feira", "weekdayIndex": 2, "leads": 776, "delivered": 759, "bounce": 17, "opens": 192, "clicks": 0, "deliveryRate": 97.81, "openRate": 25.3, "ctr": 0.0, "campaignType": "Treinamento"}, {"subject": "Abril Laranja 2026: Segurança do Paciente: Atitudes Individuais, Resultados Institucionais", "date": "2026-03-20", "dateLabel": "20/03/2026", "time": "11:05", "hour": 11, "weekday": "Sexta-feira", "weekdayIndex": 4, "leads": 773, "delivered": 757, "bounce": 16, "opens": 195, "clicks": 0, "deliveryRate": 97.93, "openRate": 25.76, "ctr": 0.0, "campaignType": "Informativo"}, {"subject": "Novos Conteúdos Medportal: Segurança do paciente começa no cálculo correto de medicamentos", "date": "2026-03-30", "dateLabel": "30/03/2026", "time": "17:41", "hour": 17, "weekday": "Segunda-feira", "weekdayIndex": 0, "leads": 802, "delivered": 781, "bounce": 21, "opens": 209, "clicks": 1, "deliveryRate": 97.38, "openRate": 26.76, "ctr": 0.13, "campaignType": "Treinamento"}, {"subject": "Evolução na biblioteca Medportal: conteúdos agora em SCORM", "date": "2026-03-31", "dateLabel": "31/03/2026", "time": "13:00", "hour": 13, "weekday": "Terça-feira", "weekdayIndex": 1, "leads": 768, "delivered": 725, "bounce": 43, "opens": 176, "clicks": 29, "deliveryRate": 94.4, "openRate": 24.28, "ctr": 4.0, "campaignType": "Treinamento"}, {"subject": "Atualização de Conteúdo Medportal | Treinamento ONA - 2026", "date": "2026-04-01", "dateLabel": "01/04/2026", "time": "14:00", "hour": 14, "weekday": "Quarta-feira", "weekdayIndex": 2, "leads": 798, "delivered": 780, "bounce": 18, "opens": 218, "clicks": 2, "deliveryRate": 97.74, "openRate": 27.95, "ctr": 0.26, "campaignType": "Treinamento"}, {"subject": "Novos Conteúdos Medportal: Google Sheets na prática", "date": "2026-04-06", "dateLabel": "06/04/2026", "time": "14:00", "hour": 14, "weekday": "Segunda-feira", "weekdayIndex": 0, "leads": 800, "delivered": 784, "bounce": 16, "opens": 205, "clicks": 1, "deliveryRate": 98.0, "openRate": 26.15, "ctr": 0.13, "campaignType": "Treinamento"}, {"subject": "Uma nova experiência está chegando no Medportal", "date": "2026-04-09", "dateLabel": "09/04/2026", "time": "15:01", "hour": 15, "weekday": "Quinta-feira", "weekdayIndex": 3, "leads": 98, "delivered": 95, "bounce": 3, "opens": 26, "clicks": 8, "deliveryRate": 96.94, "openRate": 27.37, "ctr": 8.42, "campaignType": "Informativo"}, {"subject": "Uma nova experiência está chegando no Medportal", "date": "2026-04-09", "dateLabel": "09/04/2026", "time": "16:50", "hour": 16, "weekday": "Quinta-feira", "weekdayIndex": 3, "leads": 104, "delivered": 101, "bounce": 3, "opens": 34, "clicks": 8, "deliveryRate": 97.12, "openRate": 33.66, "ctr": 7.92, "campaignType": "Informativo"}, {"subject": "Uma nova experiência está chegando no Medportal", "date": "2026-04-09", "dateLabel": "09/04/2026", "time": "17:00", "hour": 17, "weekday": "Quinta-feira", "weekdayIndex": 3, "leads": 57, "delivered": 57, "bounce": 0, "opens": 19, "clicks": 8, "deliveryRate": 100.0, "openRate": 33.33, "ctr": 14.04, "campaignType": "Informativo"}, {"subject": "Novo Treinamento Medportal: Gestão Hospitalar Baseada em Dados: Indicadores Chave de Desempenho Hospitalares", "date": "2026-04-13", "dateLabel": "13/04/2026", "time": "15:58", "hour": 15, "weekday": "Segunda-feira", "weekdayIndex": 0, "leads": 799, "delivered": 787, "bounce": 12, "opens": 195, "clicks": 1, "deliveryRate": 98.5, "openRate": 24.78, "ctr": 0.13, "campaignType": "Treinamento"}];
 
-<div class="main">
+    const helpTexts = {
+      geral: "Esta seção responde o que foi feito e como os e-mails performaram no geral. Todos os KPIs, gráficos e a tabela refletem os filtros aplicados no topo.",
+      horarios: "Esta seção cruza dia da semana e horário para indicar as melhores janelas de envio. A leitura deve considerar tanto abertura quanto CTR para evitar decisões baseadas em curiosidade sem clique.",
+      ranking: "Esta seção mostra o que funciona e o que precisa mudar. O ideal é usar o ranking com a dispersão: abertura alta e CTR baixa pode indicar assunto forte, mas CTA fraco ou proposta pouco clara.",
+      insights: "Esta seção traduz padrão em ação. O foco não é só descrever números, mas sugerir ajustes de segmentação, agenda, CTA e testes práticos para a próxima rodada."
+    };
 
-<section id="visao" class="section active">
-  <h1>Dashboard – Visão Geral <span class="help" title="KPIs e desempenho geral dos disparos">?</span></h1>
+    const columnDefs = [
+      { key:"subject", label:"Assunto do e-mail" },
+      { key:"dateLabel", label:"Data de envio" },
+      { key:"time", label:"Horário" },
+      { key:"weekday", label:"Dia da semana" },
+      { key:"campaignType", label:"Tipo de campanha" },
+      { key:"leads", label:"Leads selecionados" },
+      { key:"delivered", label:"Entregues" },
+      { key:"opens", label:"Aberturas (únicas)" },
+      { key:"clicks", label:"Cliques (únicos)" },
+      { key:"deliveryRate", label:"Taxa de entrega" },
+      { key:"openRate", label:"Taxa de abertura" },
+      { key:"ctr", label:"Taxa de clique (CTR)" }
+    ];
 
-  <div class="kpis" id="kpisVisao"></div>
+    let visibleColumns = columnDefs.map(c => c.key);
+    let charts = {};
 
-  <div class="grid">
-    <div class="chart-card"><canvas id="evolucaoMensal"></canvas></div>
-    <div class="chart-card"><canvas id="comparacaoMedias"></canvas></div>
-    <div class="chart-card"><canvas id="distribuicaoCTR"></canvas></div>
-  </div>
+    const formatInt = value => new Intl.NumberFormat('pt-BR').format(value || 0);
+    const formatPct = value => `${Number(value || 0).toFixed(2).replace('.', ',')}%`;
+    const average = arr => arr.length ? arr.reduce((acc, val) => acc + Number(val || 0), 0) / arr.length : 0;
+    const sumBy = (arr, key) => arr.reduce((acc, item) => acc + Number(item[key] || 0), 0);
+    const dayOrder = ["Segunda-feira","Terça-feira","Quarta-feira","Quinta-feira","Sexta-feira","Sábado","Domingo"];
 
-  <div class="chart-card" style="margin-top:24px">
-    <h3>Dados completos</h3>
-    <table id="tabelaDados"></table>
-  </div>
-</section>
+    function getFilters() {
+      return {
+        search: document.getElementById('filterSearch').value.trim().toLowerCase(),
+        type: document.getElementById('filterType').value,
+        start: document.getElementById('filterStart').value,
+        end: document.getElementById('filterEnd').value
+      };
+    }
 
-<section id="horarios" class="section">
-  <h1>Dashboard – Horários e Dias <span class="help" title="Performance por dia da semana e horário">?</span></h1>
-  <div class="grid">
-    <div class="chart-card"><canvas id="mediaDia"></canvas></div>
-    <div class="chart-card"><canvas id="ctrHora"></canvas></div>
-  </div>
-</section>
+    function applyFilters(data, extra = {}) {
+      const { search, type, start, end } = getFilters();
+      return data.filter(item => {
+        const matchesSearch = !search || item.subject.toLowerCase().includes(search);
+        const matchesType = !type || item.campaignType === type;
+        const matchesStart = !start || item.date >= start;
+        const matchesEnd = !end || item.date <= end;
+        const rankingSearch = !extra.search || item.subject.toLowerCase().includes(extra.search);
+        const rankingType = !extra.type || item.campaignType === extra.type;
+        return matchesSearch && matchesType && matchesStart && matchesEnd && rankingSearch && rankingType;
+      });
+    }
 
-<section id="ranking" class="section">
-  <h1>Dashboard – Ranking <span class="help" title="Melhores e piores campanhas">?</span></h1>
-  <div class="grid">
-    <div class="chart-card"><canvas id="scatter"></canvas></div>
-  </div>
-</section>
+    function groupBy(list, keyFn) {
+      return list.reduce((acc, item) => {
+        const key = keyFn(item);
+        if (!acc[key]) acc[key] = [];
+        acc[key].push(item);
+        return acc;
+      }, {});
+    }
 
-<section id="insights" class="section">
-  <h1>Dashboard – Insights <span class="help" title="Análises automáticas">?</span></h1>
-  <div class="chart-card" id="insightsTexto"></div>
-</section>
+    function typeColor(type) {
+      return {
+        Webinar: '#00A6DF',
+        Treinamento: '#253F85',
+        Suporte: '#F9BD00',
+        Informativo: '#5B8DEF'
+      }[type] || '#00A6DF';
+    }
 
-</div>
+    function buildColumnSelector() {
+      const wrap = document.getElementById('columnChecks');
+      wrap.innerHTML = columnDefs.map(col => `
+        <label><input type="checkbox" value="${col.key}" ${visibleColumns.includes(col.key) ? 'checked' : ''}> ${col.label}</label>
+      `).join('');
+      wrap.querySelectorAll('input').forEach(input => {
+        input.addEventListener('change', () => {
+          visibleColumns = Array.from(wrap.querySelectorAll('input:checked')).map(el => el.value);
+          renderOverviewTable(applyFilters(rawData));
+        });
+      });
+    }
 
-<script>
-/* =========================
-   DADOS (JSON)
-========================= */
-const dados = [
-  {"assunto":"Webinar Exclusivo","data":"26/02/2026","hora":"12:55","dia":"Quinta-feira","leads":121,"entregues":120,"aberturas":59,"cliques":39,"taxaEntrega":99.17,"taxaAbertura":49.17,"ctr":32.5},
-  {"assunto":"Atualização Institucional","data":"12/01/2026","hora":"10:00","dia":"Segunda-feira","leads":684,"entregues":659,"aberturas":160,"cliques":0,"taxaEntrega":96.35,"taxaAbertura":24.28,"ctr":0},
-  {"assunto":"Webinar É amanhã","data":"25/02/2026","hora":"15:58","dia":"Quarta-feira","leads":116,"entregues":113,"aberturas":61,"cliques":15,"taxaEntrega":97.41,"taxaAbertura":53.98,"ctr":13.27}
-];
+    function renderOverviewKpis(data) {
+      const kpis = [
+        ['Total de e-mails disparados', formatInt(data.length), 'Volume total de disparos na base filtrada'],
+        ['Total de leads selecionados', formatInt(sumBy(data, 'leads')), 'Soma dos contatos selecionados'],
+        ['Total de e-mails entregues', formatInt(sumBy(data, 'delivered')), 'Mensagens efetivamente entregues'],
+        ['Taxa média de entrega', formatPct(average(data.map(d => d.deliveryRate))), 'Eficiência média de entrega'],
+        ['Taxa média de abertura', formatPct(average(data.map(d => d.openRate))), 'Interesse inicial gerado'],
+        ['Taxa média de clique (CTR)', formatPct(average(data.map(d => d.ctr))), 'Capacidade média de gerar ação'],
+        ['Total de cliques únicos', formatInt(sumBy(data, 'clicks')), 'Volume absoluto de cliques']
+      ];
+      document.getElementById('overviewKpis').innerHTML = kpis.map(([label, value, note]) => `
+        <div class="kpi-card">
+          <div class="kpi-label">${label}</div>
+          <div class="kpi-value">${value}</div>
+          <div class="kpi-note">${note}</div>
+        </div>
+      `).join('');
+    }
 
-/* =========================
-   UTILITÁRIOS
-========================= */
-const media = arr => arr.reduce((a,b)=>a+b,0)/arr.length;
-const soma = arr => arr.reduce((a,b)=>a+b,0);
+    function renderScheduleKpis(data) {
+      const byDay = groupBy(data, item => item.weekday);
+      const byHour = groupBy(data, item => item.hour);
+      const dayOpen = Object.entries(byDay).map(([key, items]) => [key, average(items.map(i => i.openRate))]).sort((a,b)=>b[1]-a[1]);
+      const dayCtr = Object.entries(byDay).map(([key, items]) => [key, average(items.map(i => i.ctr))]).sort((a,b)=>b[1]-a[1]);
+      const combined = Object.entries(byHour).map(([key, items]) => {
+        const open = average(items.map(i => i.openRate));
+        const ctr = average(items.map(i => i.ctr));
+        return [Number(key), (open*0.45 + ctr*0.55)];
+      }).sort((a,b)=>b[1]-a[1]);
 
-/* =========================
-   KPIs VISÃO GERAL
-========================= */
-const kpis = [
-  {label:'Total de e-mails',value:dados.length},
-  {label:'Leads selecionados',value:soma(dados.map(d=>d.leads))},
-  {label:'Entregues',value:soma(dados.map(d=>d.entregues))},
-  {label:'Taxa média de entrega',value:media(dados.map(d=>d.taxaEntrega)).toFixed(2)+'%'},
-  {label:'Taxa média de abertura',value:media(dados.map(d=>d.taxaAbertura)).toFixed(2)+'%'},
-  {label:'CTR médio',value:media(dados.map(d=>d.ctr)).toFixed(2)+'%'},
-  {label:'Cliques únicos',value:soma(dados.map(d=>d.cliques))}
-];
+      const bestHour = combined[0]?.[0];
+      const worstHour = combined[combined.length-1]?.[0];
 
-document.getElementById('kpisVisao').innerHTML = kpis.map(k=>`
-  <div class="card"><span>${k.label}</span><h2>${k.value}</h2></div>
-`).join('');
+      const items = [
+        ['Melhor dia da semana (abertura)', dayOpen[0]?.[0] || '-', formatPct(dayOpen[0]?.[1] || 0)],
+        ['Melhor dia da semana (CTR)', dayCtr[0]?.[0] || '-', formatPct(dayCtr[0]?.[1] || 0)],
+        ['Melhor horário de envio', bestHour !== undefined ? `${String(bestHour).padStart(2,'0')}h` : '-', 'Equilíbrio entre abertura e clique'],
+        ['Pior dia / horário', `${dayCtr[dayCtr.length-1]?.[0] || '-'} · ${worstHour !== undefined ? String(worstHour).padStart(2,'0') + 'h' : '-'}`, 'Ponto menos eficiente da base']
+      ];
+      document.getElementById('scheduleKpis').innerHTML = items.map(([label, value, note]) => `
+        <div class="kpi-card">
+          <div class="kpi-label">${label}</div>
+          <div class="kpi-value" style="font-size:24px">${value}</div>
+          <div class="kpi-note">${note}</div>
+        </div>
+      `).join('');
+    }
 
-/* =========================
-   GRÁFICOS
-========================= */
-new Chart(evolucaoMensal,{
-  type:'bar',
-  data:{
-    labels:['Fev','Jan'],
-    datasets:[
-      {label:'Enviados',data:[2,1],backgroundColor:'#253F85'},
-      {label:'Abertura média',data:[51,24],backgroundColor:'#00A6DF'},
-      {label:'CTR médio',data:[22,0],backgroundColor:'#F9BD00'}
-    ]
-  }
-});
+    function renderOverviewCharts(data) {
+      const monthMap = groupBy(data, item => item.date.slice(0,7));
+      const months = Object.keys(monthMap).sort();
+      const monthLabels = months.map(month => {
+        const [year, mon] = month.split('-');
+        return new Date(Number(year), Number(mon)-1, 1).toLocaleDateString('pt-BR', { month:'short', year:'2-digit' });
+      });
+      const monthlySent = months.map(month => monthMap[month].length);
+      const monthlyOpen = months.map(month => average(monthMap[month].map(item => item.openRate)));
+      const monthlyCtr = months.map(month => average(monthMap[month].map(item => item.ctr)));
 
-new Chart(comparacaoMedias,{
-  type:'bar',
-  data:{
-    labels:['Abertura média','CTR médio'],
-    datasets:[{
-      data:[
-        media(dados.map(d=>d.taxaAbertura)),
-        media(dados.map(d=>d.ctr))
-      ],
-      backgroundColor:['#253F85','#F9BD00']
-    }]
-  }
-});
+      upsertChart('monthlyChart', 'bar', {
+        labels: monthLabels,
+        datasets: [
+          { label:'E-mails enviados', data: monthlySent, backgroundColor:'#253F85', borderRadius:10, yAxisID:'y' },
+          { label:'Taxa de abertura', data: monthlyOpen, type:'line', borderColor:'#00A6DF', backgroundColor:'#00A6DF', tension:.35, yAxisID:'y1' },
+          { label:'CTR', data: monthlyCtr, type:'line', borderColor:'#F9BD00', backgroundColor:'#F9BD00', tension:.35, yAxisID:'y1' }
+        ]
+      }, {
+        responsive:true,
+        maintainAspectRatio:false,
+        interaction:{ mode:'index', intersect:false },
+        plugins:{ legend:{ position:'bottom' } },
+        scales:{
+          y: { beginAtZero:true, ticks:{ color:getCss('--muted') }, grid:{ color:gridColor() } },
+          y1: { beginAtZero:true, position:'right', ticks:{ callback:v => v + '%', color:getCss('--muted') }, grid:{ drawOnChartArea:false } },
+          x: { ticks:{ color:getCss('--muted') }, grid:{ display:false } }
+        }
+      });
 
-new Chart(distribuicaoCTR,{
-  type:'pie',
-  data:{
-    labels:['CTR 0','0–2%','2–5%','>5%'],
-    datasets:[{
-      data:[
-        dados.filter(d=>d.ctr===0).length,
-        dados.filter(d=>d.ctr>0 && d.ctr<=2).length,
-        dados.filter(d=>d.ctr>2 && d.ctr<=5).length,
-        dados.filter(d=>d.ctr>5).length
-      ],
-      backgroundColor:['#ccc','#253F85','#00A6DF','#F9BD00']
-    }]
-  }
-});
+      const avgOpen = average(data.map(item => item.openRate));
+      const avgCtr = average(data.map(item => item.ctr));
+      upsertChart('compareChart', 'doughnut', {
+        labels:['Taxa média de abertura','Taxa média de clique'],
+        datasets:[{ data:[avgOpen, avgCtr], backgroundColor:['#253F85','#00A6DF'], borderWidth:0 }]
+      }, {
+        responsive:true,
+        maintainAspectRatio:false,
+        plugins:{ legend:{ position:'bottom' } }
+      });
 
-/* =========================
-   TABELA
-========================= */
-const tabela = document.getElementById('tabelaDados');
-tabela.innerHTML = `
-<thead><tr>${Object.keys(dados[0]).map(h=>`<th>${h}</th>`).join('')}</tr></thead>
-<tbody>
-${dados.map(d=>`<tr>${Object.values(d).map(v=>`<td>${v}</td>`).join('')}</tr>`).join('')}
-</tbody>`;
+      const distribution = {
+        'CTR = 0': data.filter(item => item.ctr === 0).length,
+        'CTR baixa': data.filter(item => item.ctr > 0 && item.ctr <= 2).length,
+        'CTR média': data.filter(item => item.ctr > 2 && item.ctr <= 5).length,
+        'CTR alta': data.filter(item => item.ctr > 5).length,
+      };
+      upsertChart('distributionChart', 'doughnut', {
+        labels:Object.keys(distribution),
+        datasets:[{ data:Object.values(distribution), backgroundColor:['#DC2626','#F59E0B','#5B8DEF','#00A6DF'], borderWidth:0 }]
+      }, {
+        responsive:true,
+        maintainAspectRatio:false,
+        plugins:{ legend:{ position:'bottom' } }
+      });
 
-/* =========================
-   HORÁRIOS
-========================= */
-new Chart(mediaDia,{
-  type:'bar',
-  data:{
-    labels:[...new Set(dados.map(d=>d.dia))],
-    datasets:[{
-      data:[...new Set(dados.map(d=>d.dia))].map(dia=>
-        media(dados.filter(d=>d.dia===dia).map(d=>d.taxaAbertura))
-      ),
-      backgroundColor:'#253F85'
-    }]
-  }
-});
+      const delivery = average(data.map(item => item.deliveryRate));
+      const zeroCtr = distribution['CTR = 0'];
+      const bestType = getTopCampaignType(data);
+      document.getElementById('overviewCallout').innerHTML = `
+        <h3>Leitura executiva da visão geral</h3>
+        <p>Com <strong>${formatInt(data.length)}</strong> disparos na base filtrada, a operação mantém <strong>${formatPct(delivery)}</strong> de entrega média, o que indica boa eficiência de envio. O principal ponto de atenção está na conversão para clique: a base tem <strong>${formatPct(avgCtr)}</strong> de CTR médio e <strong>${formatInt(zeroCtr)}</strong> e-mails com CTR zerado.</p>
+        <p>Quando há intenção de clique, o tipo de campanha com melhor resultado é <strong>${bestType.type}</strong>, com <strong>${formatPct(bestType.ctr)}</strong> de CTR médio. Isso sugere reforçar formatos com proposta mais clara de valor e CTA mais visível.</p>
+      `;
+    }
 
-new Chart(ctrHora,{
-  type:'line',
-  data:{
-    labels:dados.map(d=>d.hora),
-    datasets:[{
-      data:dados.map(d=>d.ctr),
-      borderColor:'#00A6DF',
-      tension:.4
-    }]
-  }
-});
+    function renderOverviewTable(data) {
+      document.getElementById('tableCounter').textContent = `${formatInt(data.length)} registros`;
+      const table = document.getElementById('overviewTable');
+      table.querySelector('thead').innerHTML = `<tr>${columnDefs.filter(col => visibleColumns.includes(col.key)).map(col => `<th>${col.label}</th>`).join('')}</tr>`;
+      table.querySelector('tbody').innerHTML = data
+        .sort((a,b) => (a.date < b.date ? 1 : -1))
+        .map(item => `<tr>${columnDefs.filter(col => visibleColumns.includes(col.key)).map(col => `<td>${formatCell(item, col.key)}</td>`).join('')}</tr>`)
+        .join('');
+    }
 
-/* =========================
-   RANKING / SCATTER
-========================= */
-new Chart(scatter,{
-  type:'scatter',
-  data:{
-    datasets:[{
-      data:dados.map(d=>({x:d.taxaAbertura,y:d.ctr})),
-      backgroundColor:'#F9BD00'
-    }]
-  }
-});
+    function formatCell(item, key) {
+      if (['deliveryRate','openRate','ctr'].includes(key)) return formatPct(item[key]);
+      if (['leads','delivered','opens','clicks'].includes(key)) return formatInt(item[key]);
+      if (key === 'campaignType') return `<span class="badge">${item[key]}</span>`;
+      return item[key] ?? '-';
+    }
 
-/* =========================
-   INSIGHTS
-========================= */
-const melhorDia = [...new Set(dados.map(d=>d.dia))]
-  .map(dia=>({dia,media:media(dados.filter(d=>d.dia===dia).map(d=>d.ctr))}))
-  .sort((a,b)=>b.media-a.media)[0];
+    function getCss(name) {
+      return getComputedStyle(document.body).getPropertyValue(name).trim();
+    }
 
-document.getElementById('insightsTexto').innerHTML = `
-<p><b>Padrão:</b> campanhas de webinar concentram maior CTR.</p>
-<p><b>Melhor dia:</b> ${melhorDia.dia}.</p>
-<p><b>Gargalo:</b> ${dados.filter(d=>d.ctr===0).length} campanhas sem cliques.</p>
-<p><b>Recomendação:</b> priorizar CTAs claros e testes A/B em campanhas institucionais.</p>
-`;
+    function gridColor() {
+      return document.body.dataset.theme === 'dark' ? 'rgba(255,255,255,.08)' : 'rgba(37,63,133,.10)';
+    }
 
-/* =========================
-   NAVEGAÇÃO
-========================= */
-function showSection(e,id){
-  e.preventDefault();
-  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  document.querySelectorAll('.nav a').forEach(a=>a.classList.remove('active'));
-  e.target.classList.add('active');
-}
-function toggleTheme(){
-  document.body.style.background =
-    document.body.style.background ? '' : '#0E1429';
-}
-</script>
+    function upsertChart(id, type, data, options) {
+      const canvas = document.getElementById(id);
+      if (charts[id]) charts[id].destroy();
+      charts[id] = new Chart(canvas, {
+        type, data,
+        options: {
+          ...options,
+          animation:false
+        }
+      });
+    }
 
+    function renderHeatmap(containerId, data, metricKey) {
+      const container = document.getElementById(containerId);
+      const hours = Array.from(new Set(data.map(item => item.hour))).sort((a,b)=>a-b);
+      const values = [];
+      dayOrder.filter(day => data.some(item => item.weekday === day)).forEach(day => {
+        hours.forEach(hour => {
+          const subset = data.filter(item => item.weekday === day && item.hour === hour);
+          const value = subset.length ? average(subset.map(item => item[metricKey])) : null;
+          if (value !== null) values.push(value);
+        });
+      });
+
+      const maxVal = Math.max(...values, 1);
+      let html = `<div class="head"></div>${hours.map(hour => `<div class="head">${String(hour).padStart(2,'0')}h</div>`).join('')}`;
+      dayOrder.filter(day => data.some(item => item.weekday === day)).forEach(day => {
+        html += `<div class="head row-head">${day}</div>`;
+        hours.forEach(hour => {
+          const subset = data.filter(item => item.weekday === day && item.hour === hour);
+          const value = subset.length ? average(subset.map(item => item[metricKey])) : null;
+          const count = subset.length;
+          const intensity = value === null ? 0 : Math.max(0.08, value / maxVal);
+          const bg = value === null
+            ? getCss('--card-2')
+            : `linear-gradient(180deg, rgba(0,166,223,${(intensity * .85).toFixed(2)}), rgba(37,63,133,${(intensity * .95).toFixed(2)}))`;
+          html += `<div class="cell" style="background:${bg}; color:${value !== null && intensity > 0.55 ? '#fff' : getCss('--text')};">
+              <span class="metric">${value === null ? '—' : formatPct(value)}</span>
+              <span class="sub">${count ? count + ' disparo(s)' : ''}</span>
+            </div>`;
+        });
+      });
+      container.innerHTML = html;
+    }
+
+    function renderScheduleCharts(data) {
+      renderHeatmap('openHeatmap', data, 'openRate');
+      renderHeatmap('ctrHeatmap', data, 'ctr');
+
+      const groupedDays = dayOrder
+        .filter(day => data.some(item => item.weekday === day))
+        .map(day => {
+          const subset = data.filter(item => item.weekday === day);
+          return {
+            day,
+            open: average(subset.map(item => item.openRate)),
+            ctr: average(subset.map(item => item.ctr))
+          };
+        });
+
+      upsertChart('dayOpenChart', 'bar', {
+        labels: groupedDays.map(item => item.day),
+        datasets:[{ label:'Abertura média', data: groupedDays.map(item => item.open), backgroundColor:'#253F85', borderRadius:10 }]
+      }, {
+        responsive:true, maintainAspectRatio:false,
+        plugins:{ legend:{ display:false } },
+        scales: {
+          y: { beginAtZero:true, ticks:{ callback:v => v + '%', color:getCss('--muted') }, grid:{ color:gridColor() } },
+          x: { ticks:{ color:getCss('--muted'), maxRotation:35, minRotation:35 }, grid:{ display:false } }
+        }
+      });
+
+      upsertChart('dayCtrChart', 'bar', {
+        labels: groupedDays.map(item => item.day),
+        datasets:[{ label:'CTR médio', data: groupedDays.map(item => item.ctr), backgroundColor:'#00A6DF', borderRadius:10 }]
+      }, {
+        responsive:true, maintainAspectRatio:false,
+        plugins:{ legend:{ display:false } },
+        scales: {
+          y: { beginAtZero:true, ticks:{ callback:v => v + '%', color:getCss('--muted') }, grid:{ color:gridColor() } },
+          x: { ticks:{ color:getCss('--muted'), maxRotation:35, minRotation:35 }, grid:{ display:false } }
+        }
+      });
+
+      const bands = {
+        'Manhã': data.filter(item => item.hour >= 6 && item.hour < 12),
+        'Tarde': data.filter(item => item.hour >= 12 && item.hour < 18),
+        'Fim do dia': data.filter(item => item.hour >= 18 || item.hour < 6)
+      };
+      const labels = Object.keys(bands);
+      upsertChart('timeBandChart', 'bar', {
+        labels,
+        datasets:[
+          { label:'Abertura média', data: labels.map(label => average(bands[label].map(item => item.openRate))), backgroundColor:'#253F85', borderRadius:10 },
+          { label:'CTR médio', data: labels.map(label => average(bands[label].map(item => item.ctr))), backgroundColor:'#F9BD00', borderRadius:10 }
+        ]
+      }, {
+        responsive:true, maintainAspectRatio:false,
+        plugins:{ legend:{ position:'bottom' } },
+        scales: {
+          y: { beginAtZero:true, ticks:{ callback:v => v + '%', color:getCss('--muted') }, grid:{ color:gridColor() } },
+          x: { ticks:{ color:getCss('--muted') }, grid:{ display:false } }
+        }
+      });
+
+      const scheduleSummary = data
+        .map(item => `${item.weekday}|${item.hour}`)
+        .filter((value, index, self) => self.indexOf(value) === index)
+        .map(key => {
+          const [day, hour] = key.split('|');
+          const subset = data.filter(item => item.weekday === day && item.hour === Number(hour));
+          return {
+            day,
+            hour: Number(hour),
+            open: average(subset.map(item => item.openRate)),
+            ctr: average(subset.map(item => item.ctr)),
+            count: subset.length
+          };
+        })
+        .sort((a,b) => a.day.localeCompare(b.day) || a.hour - b.hour);
+
+      const table = document.getElementById('scheduleTable');
+      table.querySelector('thead').innerHTML = `<tr>
+        <th>Dia da semana</th>
+        <th>Horário</th>
+        <th>Média de abertura</th>
+        <th>Média de CTR</th>
+        <th>Quantidade de disparos</th>
+      </tr>`;
+      table.querySelector('tbody').innerHTML = scheduleSummary.map(item => `
+        <tr>
+          <td>${item.day}</td>
+          <td>${String(item.hour).padStart(2,'0')}h</td>
+          <td class="table-kpi">${formatPct(item.open)}</td>
+          <td class="table-kpi">${formatPct(item.ctr)}</td>
+          <td>${formatInt(item.count)}</td>
+        </tr>
+      `).join('');
+    }
+
+    function getTopCampaignType(data) {
+      const groups = Object.entries(groupBy(data, item => item.campaignType)).map(([type, items]) => ({
+        type,
+        open: average(items.map(item => item.openRate)),
+        ctr: average(items.map(item => item.ctr)),
+        count: items.length
+      }));
+      return groups.sort((a,b) => b.ctr - a.ctr)[0] || { type:'-', ctr:0, open:0, count:0 };
+    }
+
+    function getWorstCampaignType(data) {
+      const groups = Object.entries(groupBy(data, item => item.campaignType)).map(([type, items]) => ({
+        type,
+        open: average(items.map(item => item.openRate)),
+        ctr: average(items.map(item => item.ctr)),
+        count: items.length
+      }));
+      return groups.sort((a,b) => a.ctr - b.ctr)[0] || { type:'-', ctr:0, open:0, count:0 };
+    }
+
+    function renderRanking() {
+      const mode = document.getElementById('rankingMode').value;
+      const search = document.getElementById('rankingSearch').value.trim().toLowerCase();
+      const type = document.getElementById('rankingType').value;
+      const ranked = applyFilters(rawData, { search, type });
+      let sorted = [...ranked];
+      let title = 'Top 10 abertura';
+      if (mode === 'open') {
+        sorted.sort((a,b) => b.openRate - a.openRate);
+        title = 'Top 10 e-mails com maior taxa de abertura';
+      }
+      if (mode === 'ctr') {
+        sorted.sort((a,b) => b.ctr - a.ctr);
+        title = 'Top 10 e-mails com maior CTR';
+      }
+      if (mode === 'clicks') {
+        sorted.sort((a,b) => b.clicks - a.clicks);
+        title = 'Top 10 e-mails com mais cliques absolutos';
+      }
+      if (mode === 'bottom') {
+        sorted.sort((a,b) => (a.ctr - b.ctr) || (a.openRate - b.openRate));
+        title = 'Bottom 10 e-mails com menor engajamento';
+      }
+      const topTen = sorted.slice(0, 10);
+      document.getElementById('rankingChartDesc').textContent = title;
+
+      upsertChart('rankingBarChart', 'bar', {
+        labels: topTen.map(item => truncate(item.subject, 42)),
+        datasets:[{
+          label: mode === 'clicks' ? 'Cliques únicos' : (mode === 'open' ? 'Taxa de abertura' : 'CTR'),
+          data: topTen.map(item => mode === 'clicks' ? item.clicks : mode === 'open' ? item.openRate : item.ctr),
+          backgroundColor: topTen.map(item => typeColor(item.campaignType)),
+          borderRadius:10
+        }]
+      }, {
+        indexAxis:'y',
+        responsive:true,
+        maintainAspectRatio:false,
+        plugins:{ legend:{ display:false } },
+        scales: {
+          x: { beginAtZero:true, ticks:{ color:getCss('--muted') }, grid:{ color:gridColor() } },
+          y: { ticks:{ color:getCss('--muted') }, grid:{ display:false } }
+        }
+      });
+
+      const scatterData = ranked.map(item => ({
+        x:item.openRate,
+        y:item.ctr,
+        subject:item.subject,
+        campaignType:item.campaignType,
+        clicks:item.clicks
+      }));
+      upsertChart('scatterChart', 'scatter', {
+        datasets:[{
+          label:'Campanhas',
+          data: scatterData,
+          backgroundColor: scatterData.map(item => typeColor(item.campaignType)),
+          pointRadius: scatterData.map(item => Math.max(5, Math.min(12, item.clicks / 2))),
+          pointHoverRadius: scatterData.map(item => Math.max(6, Math.min(14, item.clicks / 2 + 1)))
+        }]
+      }, {
+        responsive:true, maintainAspectRatio:false,
+        plugins:{
+          legend:{ display:false },
+          tooltip:{
+            callbacks:{
+              label: (ctx) => {
+                const raw = ctx.raw;
+                return `${raw.subject} | Abertura: ${formatPct(raw.x)} | CTR: ${formatPct(raw.y)} | Tipo: ${raw.campaignType}`;
+              }
+            }
+          }
+        },
+        scales: {
+          x: { title:{ display:true, text:'Taxa de abertura (%)' }, ticks:{ color:getCss('--muted') }, grid:{ color:gridColor() } },
+          y: { title:{ display:true, text:'CTR (%)' }, ticks:{ color:getCss('--muted') }, grid:{ color:gridColor() } }
+        }
+      });
+
+      const avgOpen = average(ranked.map(item => item.openRate));
+      const avgCtr = average(ranked.map(item => item.ctr));
+      const table = document.getElementById('rankingTable');
+      table.querySelector('thead').innerHTML = `<tr>
+        <th>Assunto do e-mail</th>
+        <th>Tipo de campanha</th>
+        <th>Abertura</th>
+        <th>CTR</th>
+        <th>Cliques</th>
+        <th>Comparação com a média geral</th>
+      </tr>`;
+      table.querySelector('tbody').innerHTML = topTen.map(item => `
+        <tr>
+          <td>${item.subject}</td>
+          <td><span class="badge">${item.campaignType}</span></td>
+          <td class="table-kpi">${formatPct(item.openRate)}</td>
+          <td class="table-kpi">${formatPct(item.ctr)}</td>
+          <td>${formatInt(item.clicks)}</td>
+          <td>${comparisonText(item, avgOpen, avgCtr)}</td>
+        </tr>
+      `).join('');
+    }
+
+    function comparisonText(item, avgOpen, avgCtr) {
+      const openStatus = item.openRate >= avgOpen ? 'acima' : 'abaixo';
+      const ctrStatus = item.ctr >= avgCtr ? 'acima' : 'abaixo';
+      return `Abertura ${openStatus} da média (${formatPct(avgOpen)}) e CTR ${ctrStatus} da média (${formatPct(avgCtr)}).`;
+    }
+
+    function truncate(value, max) {
+      return value.length > max ? value.slice(0, max - 1) + '…' : value;
+    }
+
+    function renderInsights(data) {
+      const avgOpen = average(data.map(item => item.openRate));
+      const avgCtr = average(data.map(item => item.ctr));
+      const bestType = getTopCampaignType(data);
+      const worstType = getWorstCampaignType(data);
+      const zeroCtrCount = data.filter(item => item.ctr === 0).length;
+      const highOpenLowClick = data.filter(item => item.openRate > avgOpen && item.ctr < avgCtr);
+      const correlation = calcCorrelation(data.map(item => item.leads), data.map(item => item.ctr));
+      const groupedDay = Object.entries(groupBy(data, item => item.weekday))
+        .map(([day, items]) => [day, average(items.map(item => item.ctr)), average(items.map(item => item.openRate)), items.length])
+        .sort((a,b) => b[1] - a[1]);
+      const groupedHour = Object.entries(groupBy(data, item => item.hour))
+        .map(([hour, items]) => [Number(hour), average(items.map(item => item.ctr)), average(items.map(item => item.openRate)), items.length])
+        .sort((a,b) => b[1] - a[1]);
+
+      const underusedHours = groupedHour.filter(item => item[3] <= 4 && item[1] > avgCtr);
+      const topSubjects = [...data].sort((a,b)=>b.ctr-a.ctr).slice(0,5).map(item => item.subject);
+      const grid = document.getElementById('insightsGrid');
+
+      const cards = [
+        {
+          title: 'Bloco 1 — Principais padrões',
+          items: [
+            `<strong>${bestType.type}</strong> é o tipo de campanha com maior capacidade de gerar clique, com <strong>${formatPct(bestType.ctr)}</strong> de CTR médio. Isso indica melhor aderência entre assunto, proposta e chamada para ação.`,
+            `O melhor dia da semana para clique na base analisada é <strong>${groupedDay[0]?.[0] || '-'}</strong>, com <strong>${formatPct(groupedDay[0]?.[1] || 0)}</strong> de CTR médio.`,
+            `Os assuntos com melhor performance estão concentrados em temas como <strong>${topSubjects.slice(0,3).map(s => '"' + truncate(s, 34) + '"').join(', ')}</strong>.`,
+            `A correlação entre tamanho da base e CTR é <strong>${correlation < 0 ? 'negativa' : 'positiva'}</strong> (${correlation.toFixed(2).replace('.', ',')}), sugerindo que bases maiores tendem a reduzir eficiência de clique quando a segmentação não acompanha o volume.`
+          ]
+        },
+        {
+          title: 'Bloco 2 — Gargalos identificados',
+          items: [
+            `A base possui <strong>${formatInt(zeroCtrCount)}</strong> e-mails com <strong>CTR zerado</strong>. Esses disparos devem ser revisados primeiro, porque representam esforço sem conversão.`,
+            `Existem <strong>${formatInt(highOpenLowClick.length)}</strong> campanhas com <strong>abertura acima da média</strong> e <strong>clique abaixo da média</strong>. Esse padrão normalmente sinaliza assunto forte, mas CTA fraco, benefício pouco claro ou destino pouco convincente.`,
+            `<strong>${worstType.type}</strong> é hoje o tipo com menor CTR médio (<strong>${formatPct(worstType.ctr)}</strong>), o que sugere revisar proposta de valor e copy antes de ampliar volume.`,
+            `A análise de horário mostra que nem sempre abrir bem significa clicar bem. Por isso, a agenda futura deve considerar o cruzamento entre interesse inicial e ação final.`
+          ]
+        },
+        {
+          title: 'Bloco 3 — Oportunidades',
+          items: [
+            underusedHours.length
+              ? `Há horários pouco explorados com performance acima da média, como <strong>${underusedHours.map(item => String(item[0]).padStart(2,'0') + 'h').join(', ')}</strong>. Vale testar esses slots com maior frequência.`
+              : `Os horários mais fortes já estão relativamente presentes na base. A oportunidade passa a ser aprofundar segmentação e copy, e não apenas mudar a agenda.`,
+            `Campanhas com formato de <strong>${bestType.type}</strong> podem virar referência para novos testes de assunto, CTA e estrutura de mensagem.`,
+            `Os melhores resultados de clique estão concentrados em janelas como <strong>${groupedHour[0] ? String(groupedHour[0][0]).padStart(2,'0') + 'h' : '-'}</strong>, o que pode orientar a próxima agenda de envios.`,
+            `Temas de maior engajamento devem ganhar novas variações de abordagem para aumentar frequência sem saturar a base.`
+          ]
+        },
+        {
+          title: 'Bloco 4 — Recomendações práticas',
+          items: [
+            `Reforçar <strong>CTA explícito e único</strong> nos disparos com objetivo de conversão, evitando e-mails apenas informativos quando a meta é clique.`,
+            `Executar <strong>testes A/B</strong> de assunto em campanhas parecidas, comparando promessa de benefício, urgência e especificidade do tema.`,
+            `Priorizar envios em <strong>${groupedDay[0]?.[0] || '-'}</strong> e nas faixas de horário com melhor CTR, mantendo um grupo de controle para validar se o padrão se sustenta.`,
+            `Para bases maiores, aplicar <strong>segmentação mais fina</strong>, porque o comportamento da base indica perda de eficiência quando o volume cresce sem personalização.`
+          ]
+        }
+      ];
+
+      grid.innerHTML = cards.map(card => `
+        <div class="insight-card">
+          <h3>${card.title}</h3>
+          <ul>${card.items.map(item => `<li>${item}</li>`).join('')}</ul>
+        </div>
+      `).join('');
+
+      document.getElementById('strategyCallout').innerHTML = `
+        <h3>Síntese estratégica</h3>
+        <p>A leitura combinada da base mostra que a oportunidade principal não está apenas em aumentar volume, mas em <strong>qualificar envio, agenda e proposta de clique</strong>. O caminho mais promissor é replicar aprendizados dos formatos com melhor CTR, ajustar campanhas com abertura forte e clique fraco e testar horários de maior intenção com segmentação mais refinada.</p>
+      `;
+    }
+
+    function calcCorrelation(x, y) {
+      if (!x.length || x.length !== y.length) return 0;
+      const meanX = average(x);
+      const meanY = average(y);
+      let num = 0, denX = 0, denY = 0;
+      for (let i = 0; i < x.length; i++) {
+        const dx = x[i] - meanX;
+        const dy = y[i] - meanY;
+        num += dx * dy;
+        denX += dx * dx;
+        denY += dy * dy;
+      }
+      return denX && denY ? num / Math.sqrt(denX * denY) : 0;
+    }
+
+    function renderAll() {
+      const filtered = applyFilters(rawData);
+      renderOverviewKpis(filtered);
+      renderOverviewCharts(filtered);
+      renderOverviewTable(filtered);
+      renderScheduleKpis(filtered);
+      renderScheduleCharts(filtered);
+      renderRanking();
+      renderInsights(filtered);
+    }
+
+    document.querySelectorAll('.nav button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
+        document.getElementById(btn.dataset.section).classList.add('active');
+      });
+    });
+
+    ['filterSearch','filterType','filterStart','filterEnd'].forEach(id => {
+      document.getElementById(id).addEventListener('input', renderAll);
+      document.getElementById(id).addEventListener('change', renderAll);
+    });
+    ['rankingMode','rankingSearch','rankingType'].forEach(id => {
+      document.getElementById(id).addEventListener('input', renderRanking);
+      document.getElementById(id).addEventListener('change', renderRanking);
+    });
+
+    document.getElementById('columnsBtn').addEventListener('click', (event) => {
+      event.preventDefault();
+      document.getElementById('columnsPanel').classList.toggle('open');
+    });
+    document.addEventListener('click', (event) => {
+      const panel = document.getElementById('columnsPanel');
+      const button = document.getElementById('columnsBtn');
+      if (!panel.contains(event.target) && event.target !== button) {
+        panel.classList.remove('open');
+      }
+    });
+
+    document.getElementById('themeToggle').addEventListener('click', () => {
+      const body = document.body;
+      body.dataset.theme = body.dataset.theme === 'light' ? 'dark' : 'light';
+      renderAll();
+    });
+
+    document.querySelectorAll('.help-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.getElementById('helpText').textContent = helpTexts[btn.dataset.help];
+        document.getElementById('helpModal').classList.add('open');
+      });
+    });
+    document.getElementById('closeHelp').addEventListener('click', () => {
+      document.getElementById('helpModal').classList.remove('open');
+    });
+    document.getElementById('helpModal').addEventListener('click', (event) => {
+      if (event.target.id === 'helpModal') {
+        document.getElementById('helpModal').classList.remove('open');
+      }
+    });
+
+    buildColumnSelector();
+    renderAll();
+  </script>
 </body>
 </html>
